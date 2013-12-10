@@ -24,7 +24,6 @@ class RapModel
   def connect
     begin
         @con = Mysql.new 'localhost', 'crawler', 'SamGoal!0', 'rapnet'
-        puts @con.get_server_info
     rescue Mysql::Error => e
         puts e.errno
         puts e.error
