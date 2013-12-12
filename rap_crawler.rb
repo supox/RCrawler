@@ -6,14 +6,14 @@ require './rap_model'
 require './rap_tasker'
 
 class RapCrawler
-  def initialize
+	def initialize
 		puts 'Starting browser...'
 		@browser = get_chrome
 		@model = RapModel.new
 		@model.connect
-  end
+	end
   
-  def get_firefox
+	def get_firefox
 		profile = Selenium::WebDriver::Firefox::Profile.new
 		## Disable CSS
 		profile['permissions.default.stylesheet']= 2
@@ -22,7 +22,7 @@ class RapCrawler
 		## Disable Flash
 		profile['dom.ipc.plugins.enabled.libflashplayer.so']= 'false'
 		Selenium::WebDriver.for :firefox, :profile => profile
-  end
+	end
 
 	def get_chrome
 		profile = Selenium::WebDriver::Chrome::Profile.new
@@ -37,8 +37,8 @@ class RapCrawler
 	
 	def crawl     
 		login
-    fetch_data
-    logout
+		fetch_data
+		logout
 		quit
 		puts 'Done.'	
 	end
@@ -67,13 +67,24 @@ class RapCrawler
 		puts "Title = #{@browser.title}"
 	end
 	
-  def fetch_data
-    @tasker = RapTasker.new
-    while @params=@tasker.get_next_task
-      search
-		  parse_result
-    end    
-  end
+	def fetch_data
+		@tasker = RapTasker.new
+		while @params=@tasker.get_next_task
+			fetch_row
+		end    
+	end
+	
+	def fetch_row
+		tries = 0
+		begin
+			search
+			parse_result	
+		rescue  => e
+			tries += 1
+			retry unless tries >= 3
+			puts "Could not load data for #{@params}. Reason = #{e}" 
+		end
+	end
   
 	def search(search_link = 'http://www.rapnet.com/RapNet/Search/')
 		from_element_name = 'ctl00$cphMainContent$txtSizeFrom'
@@ -84,13 +95,13 @@ class RapCrawler
 		color_to_id = 'ctl00_cphMainContent_drpColorTo'
 		clarity_from_id = 'ctl00_cphMainContent_drpClarityFrom'
 		clarity_to_id = 'ctl00_cphMainContent_drpClarityTo'
-    polish_from_id='ctl00_cphMainContent_drpPolishFrom'
-    polish_to_id='ctl00_cphMainContent_drpPolishTo'
-    sym_from_id='ctl00_cphMainContent_drpSymmFrom'
-    sym_to_id='ctl00_cphMainContent_drpSymmTo'
-    cut_from_id='ctl00_cphMainContent_drpCutFrom'
-    cut_to_id='ctl00_cphMainContent_drpCutTo'
-    flour_id='ctl00_cphMainContent_lstFluorescenceIntensity'
+	polish_from_id='ctl00_cphMainContent_drpPolishFrom'
+	polish_to_id='ctl00_cphMainContent_drpPolishTo'
+	sym_from_id='ctl00_cphMainContent_drpSymmFrom'
+	sym_to_id='ctl00_cphMainContent_drpSymmTo'
+	cut_from_id='ctl00_cphMainContent_drpCutFrom'
+	cut_to_id='ctl00_cphMainContent_drpCutTo'
+	flour_id='ctl00_cphMainContent_lstFluorescenceIntensity'
 		number_of_results_per_page_id = 'ctl00_cphMainContent_drpNumberOfResults'
 		latest_listing_id = 'ctl00_cphMainContent_chkLatestListings'
 		gia_checkbox_id = 'ctl00_cphMainContent_chklstGradingReport_0'
@@ -99,49 +110,49 @@ class RapCrawler
 		@browser.navigate.to search_link
 
 		puts "Filling fields for #{@params}"
-    # size
+	# size
 		from_size = @params[:size]
 		to_size = @params[:size] + 0.09
 		@browser.find_element(:name, from_element_name).send_keys from_size.to_s
 		@browser.find_element(:name, to_element_name).send_keys to_size.to_s
-        
+		
 		# select_value_of_element(:id, number_of_results_per_page_id, "50")
 		select_value_of_element(:id, shape_select_id, "Round")
-    @browser.find_element(:id, gia_checkbox_id).click
+	@browser.find_element(:id, gia_checkbox_id).click
  
-    # clarity
-    select_value_of_element(:id, clarity_from_id, @params[:clarity])
-    select_value_of_element(:id, clarity_to_id, @params[:clarity])
-    # color
-    select_value_of_element(:id, color_from_id, @params[:color])
-    select_value_of_element(:id, color_to_id, @params[:color])
-    # sym
-    select_value_of_element(:id, sym_from_id, @params[:sym])
-    select_value_of_element(:id, sym_to_id, @params[:sym])
-    # cut
-    select_value_of_element(:id, cut_from_id, @params[:cut])
-    select_value_of_element(:id, cut_to_id, @params[:cut])
-    # polish
-    select_value_of_element(:id, polish_from_id, @params[:polish])
-    select_value_of_element(:id, polish_to_id, @params[:polish])
-    # flour
-    select_value_of_element(:id, flour_id, @params[:flour])
-    
-    @browser.find_element(:name, search_element_name).click
+	# clarity
+	select_value_of_element(:id, clarity_from_id, @params[:clarity])
+	select_value_of_element(:id, clarity_to_id, @params[:clarity])
+	# color
+	select_value_of_element(:id, color_from_id, @params[:color])
+	select_value_of_element(:id, color_to_id, @params[:color])
+	# sym
+	select_value_of_element(:id, sym_from_id, @params[:sym])
+	select_value_of_element(:id, sym_to_id, @params[:sym])
+	# cut
+	select_value_of_element(:id, cut_from_id, @params[:cut])
+	select_value_of_element(:id, cut_to_id, @params[:cut])
+	# polish
+	select_value_of_element(:id, polish_from_id, @params[:polish])
+	select_value_of_element(:id, polish_to_id, @params[:polish])
+	# flour
+	select_value_of_element(:id, flour_id, @params[:flour])
+	
+	@browser.find_element(:name, search_element_name).click
 	end
 	
 	def parse_result
 		begin
-      puts "Parsing page."
-              
-      # parse current page
-      data, number_of_results = parse_page(@browser.page_source)
-      relevant_stone = (data[33] || data.last)
-      
-      rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i
-      row = @params.merge({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round"})
-      @model.insert(row)
-      # get_next_page
+	  puts "Parsing page."
+			  
+	  # parse current page
+	  data, number_of_results = parse_page(@browser.page_source)
+	  relevant_stone = (data[33] || data.last)
+	  
+	  rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i
+	  row = @params.merge({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round"})
+	  @model.insert(row)
+	  # get_next_page
 		rescue Exception => e
 			# probably could not find next button, continue
 			puts e.message  
@@ -152,8 +163,8 @@ class RapCrawler
 		begin
 			doc = Nokogiri::HTML(html)
 
-      number_of_results_content=doc.css('span#ctl00_cphMainContent_lblDiamondsCount').text
-      number_of_results=/Found (\d+,?\d*)/.match(number_of_results_content)[1].gsub(',','').to_i
+	  number_of_results_content=doc.css('span#ctl00_cphMainContent_lblDiamondsCount').text
+	  number_of_results=/Found (\d+,?\d*)/.match(number_of_results_content)[1].gsub(',','').to_i
 
 			table = doc.css('table#ctl00_cphMainContent_gvResults')
 			rows = table.css('tr.RowStyle')
@@ -162,11 +173,11 @@ class RapCrawler
 			headers.reject!.with_index{|_,i| rejected_values[i]}
 
 			data = rows.collect do |row|
-        d={}
+		d={}
 			  row.css('>td').reject.with_index{|_,i| rejected_values[i]}.each.with_index do |td, index|
-			    d[headers[index]] = td.content.strip
-		    end
-        d
+				d[headers[index]] = td.content.strip
+			end
+		d
 			end
 			return data, number_of_results
 		rescue Exception => e  
