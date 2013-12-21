@@ -21,60 +21,60 @@ require 'mysql'
 #                       );
 
 class RapModel
-  def connect
-    begin
-        @con = Mysql.new 'localhost', 'crawler', 'SamGoal!0', 'rapnet'
-    rescue Mysql::Error => e
-        puts e.errno
-        puts e.error
+    def connect
+        begin
+            @con = Mysql.new 'localhost', 'crawler', 'SamGoal!0', 'rapnet'
+        rescue Mysql::Error => e
+            puts e.errno
+            puts e.error
+        end
+        @con
     end
-    @con
-  end
-  
-  def disconnect
-    @con.close if @con
-  end
-  
-  def insert data
-    begin
-      # first, check if id exists:
-      if id = get_id_for(data)
-        wheres = data.collect do |key, value|
-          "#{key}='#{value}'"
-        end.join(',')
-        
-        rs = @con.query("UPDATE diamonds SET #{wheres}, updated=NOW() WHERE id=#{id};")
-        return rs
-      end
-      
-      # else - create new row
-      keys = data.keys.join(',')
-      vals = data.values.collect{|val| "'#{val}'"}.join(',')
-      rs = @con.query("INSERT INTO diamonds(#{keys}) VALUES(#{vals})")
-    rescue Mysql::Error => e
-        puts e.errno
-        puts e.error
+
+    def disconnect
+        @con.close if @con
     end
-  end
-  
-  private
-  
-  def get_id_for data
-    begin
-      wheres = data.select { |key, value| not [:number_of_results, :rap_percentage].include? key}.collect do |key, value|
-        "#{key}='#{value}'"
-      end.join(' AND ')
-      
-      rs = @con.query("SELECT id FROM diamonds WHERE #{wheres} LIMIT 1;")
-      return nil if rs.num_rows == 0
-      rs.fetch_hash["id"]
-    rescue Mysql::Error => e
-      puts e.errno
-      puts e.error
-      nil
-  end
-    
-  end
+
+    def insert data
+        begin
+            # first, check if id exists:
+            if id = get_id_for(data)
+                wheres = data.collect do |key, value|
+                    "#{key}='#{value}'"
+                end.join(',')
+
+                rs = @con.query("UPDATE diamonds SET #{wheres}, updated=NOW() WHERE id=#{id};")
+                return rs
+            end
+
+            # else - create new row
+            keys = data.keys.join(',')
+            vals = data.values.collect{|val| "'#{val}'"}.join(',')
+            query = "INSERT INTO diamonds(#{keys}, updated) VALUES(#{vals}, NOW())" 
+            p query
+            rs = @con.query(query)
+        rescue Mysql::Error => e
+            puts e.errno
+            puts e.error
+        end
+    end
+
+    def get_id_for data
+        begin
+            wheres = data.select { |key, value| not [:number_of_results, :rap_percentage].include? key}.collect do |key, value|
+                "#{key}='#{value}'"
+            end.join(' AND ')
+
+            rs = @con.query("SELECT id FROM diamonds WHERE #{wheres} LIMIT 1;")
+            return nil if rs.num_rows == 0
+            rs.fetch_hash["id"]
+        rescue Mysql::Error => e
+            puts e.errno
+            puts e.error
+            nil
+        end
+
+    end
 end
 
 # model = RapModel.new
@@ -84,6 +84,6 @@ end
 # rescue => e
 #  p e
 #ensure
-  # model.disconnect
+# model.disconnect
 #end
 

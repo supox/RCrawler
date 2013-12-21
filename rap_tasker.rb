@@ -4,13 +4,17 @@ class RapTasker
     v=["Excellent","Very Good", "Good"]
     values_hash = {size: 0.3.step(1,0.1).to_a, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v, cut:v, polish:v, flour:["None", "Very Slight"]}
     @values = product_hash(values_hash)
-    @index = 1000
+    @index = 0
+    @model = RapModel.new
+    @model.connect
   end
   
   def get_next_task
-    return nil if @index >= @values.length
-    task = @values[@index]
-    @index = @index + 1
+    begin
+        return nil if @index >= @values.length
+        task = @values[@index]
+        @index += 1
+    end while @model.get_id_for task
     task
   end
 
