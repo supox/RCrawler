@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b Shape:
+  = @diamond.shape
+%p
+  %b Size:
+  = @diamond.size
+%p
+  %b Color:
+  = @diamond.color
+%p
+  %b Clarity:
+  = @diamond.clarity
+%p
+  %b Cut:
+  = @diamond.cut
+%p
+  %b Polish:
+  = @diamond.polish
+%p
+  %b Sym:
+  = @diamond.sym
+%p
+  %b Flour:
+  = @diamond.flour
+%p
+  %b Number of results:
+  = @diamond.number_of_results
+%p
+  %b Rap percentage:
+  = @diamond.rap_percentage
+
+= link_to 'Edit', edit_diamond_path(@diamond)
+\|
+= link_to 'Back', diamonds_path

@@ -1,0 +1,40 @@
+= form_for @diamond do |f|
+  - if @diamond.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@diamond.errors.count, "error")} prohibited this diamond from being saved:"
+      %ul
+        - @diamond.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :shape
+    = f.text_field :shape
+  .field
+    = f.label :size
+    = f.text_field :size
+  .field
+    = f.label :color
+    = f.text_field :color
+  .field
+    = f.label :clarity
+    = f.text_field :clarity
+  .field
+    = f.label :cut
+    = f.text_field :cut
+  .field
+    = f.label :polish
+    = f.text_field :polish
+  .field
+    = f.label :sym
+    = f.text_field :sym
+  .field
+    = f.label :flour
+    = f.text_field :flour
+  .field
+    = f.label :number_of_results
+    = f.number_field :number_of_results
+  .field
+    = f.label :rap_percentage
+    = f.number_field :rap_percentage
+  .actions
+    = f.submit 'Save'

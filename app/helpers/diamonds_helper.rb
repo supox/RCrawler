@@ -1,0 +1,2 @@
+module DiamondsHelper
+end
