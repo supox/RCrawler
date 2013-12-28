@@ -7,13 +7,11 @@
   %ul
     - Diamond.ranges.each do |key, value|
       %li
-        - puts "Key=#{key.inspect}, value=#{value.inspect}"
         = key.capitalize
         = f.select key, options_for_select(value.push('All'), 'All'), {}, 
                 :onchange=>"javascript: updateSearch();"
-    = f.submit "Search", :name => nil, :id => 'diamonds_search'
+    = f.submit "Search"
 
   %div#diamonds
     = render 'diamonds'
 
-= link_to 'New Diamond', new_diamond_path

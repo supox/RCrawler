@@ -39,16 +39,20 @@ class ExcelController < ApplicationController
   def process_row(row)
     na_row = ["N/A", "N/A"]
     begin
-      h=Hash[@headers.zip(row)]
+      h=Hash[@headers.collect{|k| safe_downcase(k)}.zip(row)]
       d = Diamond.search(h).first
       if d.number_of_results > 0
-        row + [d.rap_percentage, d.rap_percentage-h["Discount"]]
+        row + [d.rap_percentage, d.rap_percentage-h["discount"]]
       else
         raise 'No results'
       end
     rescue
       row + na_row
     end
+  end
+
+  def safe_downcase s
+    s.respond_to?(:downcase) ? s.downcase : s
   end
 
   def send_excel rows

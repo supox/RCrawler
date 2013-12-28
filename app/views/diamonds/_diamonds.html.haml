@@ -14,9 +14,6 @@
     %th Flour
     %th Number of results
     %th Rap percentage
-    %th
-    %th
-    %th
 
   - @diamonds.each do |diamond|
     %tr
@@ -30,9 +27,6 @@
       %td= diamond.flour
       %td= diamond.number_of_results
       %td= diamond.rap_percentage
-      %td= link_to 'Show', diamond
-      %td= link_to 'Edit', edit_diamond_path(diamond)
-      %td= link_to 'Destroy', diamond, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
