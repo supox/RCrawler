@@ -3,7 +3,7 @@ require_relative './rap_data_crawler'
 require_relative './rap_tasker' 
 
 # You might want to change this
-ENV["RAILS_ENV"] ||= "development"
+ENV["RAILS_ENV"] ||= "production"
 
 root = File.expand_path(File.dirname(__FILE__))
 root = File.dirname(root) until File.exists?(File.join(root, 'config'))
