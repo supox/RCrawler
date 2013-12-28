@@ -42,13 +42,12 @@ class ExcelController < ApplicationController
       h=Hash[@headers.collect{|k| safe_downcase(k)}.zip(row)]
       d = Diamond.search(h).first
       if d.number_of_results > 0
-        row + [d.rap_percentage, d.rap_percentage-h["discount"]]
-      else
-        raise 'No results'
+        return row + [d.rap_percentage, d.rap_percentage-h["discount"]]
       end
     rescue
-      row + na_row
     end
+
+    return row + na_row
   end
 
   def safe_downcase s
@@ -63,6 +62,7 @@ class ExcelController < ApplicationController
       default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER, :sz=>10)
 
       wb.add_worksheet(:name => "Diamonds") do |sheet|
+        sheet.sheet_view.zoom_scale=65<D-1>
         rows.each {|row| sheet.add_row(row, style:default)}
         # apply the head style to the first row.
         sheet.row_style 0, head
