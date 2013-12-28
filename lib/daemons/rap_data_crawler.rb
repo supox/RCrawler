@@ -5,7 +5,7 @@ class RapDataCrawler
 
   def open
     puts 'Starting browser...'
-    @browser = get_chrome
+    @browser = get_firefox
     @opened = login
   end
 
