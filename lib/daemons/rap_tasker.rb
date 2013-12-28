@@ -7,7 +7,7 @@ class RapTasker
   end
   
   def prepare_db
-    values_hash = Diamonds.ranges
+    values_hash = Diamond.ranges
     @values = product_hash(values_hash)
     @values.each do |v|
         Diamond.new(v).save!
