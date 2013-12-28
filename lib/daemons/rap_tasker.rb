@@ -7,8 +7,7 @@ class RapTasker
   end
   
   def prepare_db
-    v=["Excellent","Very Good", "Good"]
-    values_hash = {size: 0.3.step(1,0.1).to_a, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v, cut:v, polish:v, flour:["None", "Very Slight"]}
+    values_hash = Diamonds.ranges
     @values = product_hash(values_hash)
     @values.each do |v|
         Diamond.new(v).save!

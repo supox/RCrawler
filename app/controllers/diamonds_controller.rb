@@ -4,7 +4,12 @@ class DiamondsController < ApplicationController
   # GET /diamonds
   # GET /diamonds.json
   def index
-    @diamonds = Diamond.paginate(:page => params[:page])
+    respond_to do |format|
+      format.html {
+        @search = Diamond.new(params[:search] ? search_params : nil)
+        @diamonds = Diamond.search(@search).paginate(:per_page => 5, :page => params[:page])
+      }
+    end
   end
 
   # GET /diamonds/1
@@ -67,6 +72,9 @@ class DiamondsController < ApplicationController
       @diamond = Diamond.find(params[:id])
     end
 
+    def search_params
+      params.require(:search).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour, :number_of_results, :rap_percentage)
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def diamond_params
       params.require(:diamond).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour, :number_of_results, :rap_percentage)

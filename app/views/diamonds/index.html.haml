@@ -1,41 +1,19 @@
 %h1 Listing diamonds
 
-= will_paginate @diamonds
+%p
+  = link_to 'Download excel', url_for(format:'xlsx')
 
-%table
-  %tr
-    %th Shape
-    %th Size
-    %th Color
-    %th Clarity
-    %th Cut
-    %th Polish
-    %th Sym
-    %th Flour
-    %th Number of results
-    %th Rap percentage
-    %th
-    %th
-    %th
+= form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search'}, method:'get') do |f|
+  %ul
+    - Diamond.ranges.each do |key, value|
+      %li
+        - puts "Key=#{key.inspect}, value=#{value.inspect}"
+        = key.capitalize
+        = f.select key, options_for_select(value.push('All'), 'All'), {}, 
+                :onchange=>"javascript: updateSearch();"
+    = f.submit "Search", :name => nil, :id => 'diamonds_search'
 
-  - @diamonds.each do |diamond|
-    %tr
-      %td= diamond.shape
-      %td= diamond.size
-      %td= diamond.color
-      %td= diamond.clarity
-      %td= diamond.cut
-      %td= diamond.polish
-      %td= diamond.sym
-      %td= diamond.flour
-      %td= diamond.number_of_results
-      %td= diamond.rap_percentage
-      %td= link_to 'Show', diamond
-      %td= link_to 'Edit', edit_diamond_path(diamond)
-      %td= link_to 'Destroy', diamond, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= will_paginate @diamonds
+  %div#diamonds
+    = render 'diamonds'
 
 = link_to 'New Diamond', new_diamond_path

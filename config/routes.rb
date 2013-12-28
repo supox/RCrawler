@@ -1,6 +1,9 @@
 RapCrawler::Application.routes.draw do
   resources :diamonds
 
+  get 'excel' => 'excel#index'
+  post 'excel' => 'excel#modify'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

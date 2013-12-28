@@ -20,3 +20,8 @@ gem 'daemons-rails'
 gem 'selenium-webdriver'
 gem 'nokogiri'
 gem 'will_paginate' 
+gem 'jquery-rails'
+# gem 'rubyzip', '< 1.0.0'
+gem 'axlsx'
+gem 'simple_xlsx_reader'
+
