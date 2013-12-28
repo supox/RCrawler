@@ -8,7 +8,6 @@ class Diamond < ActiveRecord::Base
       # white list
       search_hash={}
       ranges.each do |k,v|
-        k=k.to_s.downcase
         search_hash[k] = search[k] if search[k] and search[k] != 'All'
       end
       p search
