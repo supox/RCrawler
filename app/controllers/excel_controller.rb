@@ -33,7 +33,7 @@ class ExcelController < ApplicationController
 
   def process_header(row)
     @headers = row
-    row + ["Rap %", "Modified Rap %"]
+    row + ["Target Rap%", "Modified Rap%"]
   end
 
   def process_row(row)
@@ -53,8 +53,15 @@ class ExcelController < ApplicationController
 
   def send_excel rows
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Diamonds", :header_style => {:bg_color => "00", :fg_color => "FF", :sz => 12, :alignment => { :horizontal => :center }}, :style => {:border => Axlsx::STYLE_THIN_BORDER}) do |sheet|
-        rows.each {|row| sheet.add_row row}
+      wb = p.workbook
+      styles = wb.styles
+      head = styles.add_style :bg_color => "00", :fg_color => "FF", :sz => 12, :b => true
+      default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER, :sz=>10)
+
+      wb.add_worksheet(:name => "Diamonds") do |sheet|
+        rows.each {|row| sheet.add_row(row, style:default)}
+        # apply the head style to the first row.
+        sheet.row_style 0, head
       end
       begin 
         filename = "rap_data_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
