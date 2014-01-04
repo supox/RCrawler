@@ -19,32 +19,56 @@ class ExcelController < ApplicationController
   end
 
   def modify_rows rows
-    modified_rows=[]
-    rows.each_with_index do |row,index|
-      if(index==0)
-        modified_rows << process_header(row)
+    rows.collect do |row|
+      if not @header_found
+        process_header(row)
       else
-        modified_rows << process_row(row)
+        process_row(row)
       end
     end
-
-    modified_rows
   end
 
   def process_header(row)
+    return row if row.select{|d| d}.size < 3
     @headers = row
+    @header_found = true
     row + ["Target Rap%", "Modified Rap%"]
+  end
+
+  def domain_headers
+    return @domain_headers if @domain_headers
+    keys_table = {'size'=>'ct.', 'clarity'=>'cla', 'color'=>'col', 'shape'=>'shape', 'cut'=>'cut', 'sym'=>'sym', 'flour' => 'fluo', 'polish'=>'pol'}
+    @domain_headers = @headers.collect do |value|
+      if index = keys_table.values.find_index(safe_downcase(value))
+        keys_table.keys[index]
+      else
+        nil
+      end
+    end
   end
 
   def process_row(row)
     na_row = ["N/A", "N/A"]
     begin
-      h=Hash[@headers.collect{|k| safe_downcase(k)}.zip(row)]
+      h=Hash[domain_headers.zip(row)]
+
+      # transform values to domain:
+      transform_table={"ex"=>"Excellent","vg"=>"Very Good", "g"=>"Good"}
+      ["sym", "cut", "polish"].each do |key|
+        h[key] = transform_table[safe_downcase(h[key])]
+      end
+      flou_table = {"n"=>"None", "f"=>"Very Slight"}
+      h["flour"] = flou_table[safe_downcase(h["flour"])]
+      shape_table = {"br"=>"Round"}
+      h["shape"] = shape_table[safe_downcase(h["shape"])]
+
       d = Diamond.search(h).first
       if d.number_of_results > 0
-        return row + [d.rap_percentage, d.rap_percentage-h["discount"]]
+        discount = h["discount"] || 0 # TODO.
+        return row + [d.rap_percentage, d.rap_percentage-discount]
       end
-    rescue
+    rescue => e
+      p e
     end
 
     return row + na_row
@@ -62,7 +86,7 @@ class ExcelController < ApplicationController
       default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER, :sz=>10)
 
       wb.add_worksheet(:name => "Diamonds") do |sheet|
-        sheet.sheet_view.zoom_scale=65<D-1>
+        sheet.sheet_view.zoom_scale=100
         rows.each {|row| sheet.add_row(row, style:default)}
         # apply the head style to the first row.
         sheet.row_style 0, head

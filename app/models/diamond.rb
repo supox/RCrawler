@@ -6,12 +6,11 @@ class Diamond < ActiveRecord::Base
   def self.search(search)
     if search
       # white list
+      search = Hash[search.map{ |k, v| [(k.to_sym if k.respond_to?('to_sym')), v] }]
       search_hash={}
       ranges.each do |k,v|
         search_hash[k] = search[k] if search[k] and search[k] != 'All'
       end
-      p search
-      p search_hash
       where(search_hash)
     else
       all
