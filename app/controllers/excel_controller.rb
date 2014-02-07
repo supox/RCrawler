@@ -7,10 +7,24 @@ class ExcelController < ApplicationController
   def modify
     rows = load_excel (params[:file].path)
     modified_rows = modify_rows(rows)
-    send_excel modified_rows
+    filename = "rap_data_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+    send_excel filename, modified_rows
+  end
+
+  def price_list
+    rows = load_price_list
+    filename = "rap_price_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+    send_excel filename, rows    
   end
 
   private
+
+  def load_price_list
+    ranges = Diamond.price_list_ranges
+    keys = ranges.keys + [:number_of_results, :rap_percentage]
+    headers = keys.collect{ |k| k.to_s.titleize}
+    [headers] + Diamond.search(ranges).select{|d| (d.number_of_results || 0) > 0}.collect{|d| keys.collect{|key| d.send key }}
+  end
 
   def load_excel filename 
     doc = SimpleXlsxReader.open(filename)
@@ -78,7 +92,7 @@ class ExcelController < ApplicationController
     s.respond_to?(:downcase) ? s.downcase : s
   end
 
-  def send_excel rows
+  def send_excel(filename, rows)
     Axlsx::Package.new do |p|
       wb = p.workbook
       styles = wb.styles
@@ -92,7 +106,6 @@ class ExcelController < ApplicationController
         sheet.row_style 0, head
       end
       begin 
-        filename = "rap_data_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
         temp = Tempfile.new(filename, 'tmp') 
         p.serialize temp.path
         temp.flush
@@ -100,6 +113,6 @@ class ExcelController < ApplicationController
       ensure
         temp.close 
       end
-    end
+    end  
   end
 end

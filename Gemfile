@@ -12,10 +12,36 @@ group :production do
   gem 'rails_12factor', '0.0.2'
 end
 
+group :development, :test do
+  gem "capybara"
+  gem "capybara-webkit"
+  gem "launchy"
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+end
+
+# Use unicorn as the app server
+gem 'unicorn'
+
+# Deploy with Capistrano
+group :development do
+    gem 'capistrano', '~> 3.1'
+    # rails specific capistrano funcitons
+    gem 'capistrano-rails', '~> 1.1.0'
+    gem 'capistrano-rvm'
+end
+
+
+gem 'formtastic'
+gem 'formtastic-bootstrap'
+
+gem 'rubyzip',  "~> 1.1", require: 'zip'
+gem 'zip-zip'
+
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'
-gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder'
 gem 'haml'
@@ -25,9 +51,6 @@ gem 'selenium-webdriver'
 gem 'nokogiri'
 gem 'will_paginate' 
 gem 'jquery-rails'
-# gem 'rubyzip', '< 1.0.0'
 gem 'axlsx'
 gem 'simple_xlsx_reader'
-
-
 
