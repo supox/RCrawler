@@ -33,8 +33,9 @@ class ExcelController < ApplicationController
   end
 
   def modify_rows rows
-    rows.collect do |row|
+    rows.collect.with_index do |row, index|
       if not @header_found
+        @headers_index = index
         process_header(row)
       else
         process_row(row)
@@ -43,7 +44,7 @@ class ExcelController < ApplicationController
   end
 
   def process_header(row)
-    return row if row.select{|d| d}.size < 3
+    return (row + ["",""]) if row.select{|d| d}.size < 3
     @headers = row
     @header_found = true
     row + ["Target Rap%", "Modified Rap%"]
@@ -77,7 +78,7 @@ class ExcelController < ApplicationController
       h["shape"] = shape_table[safe_downcase(h["shape"])]
 
       d = Diamond.search(h).first
-      if d.number_of_results > 0
+      if d && d.number_of_results > 0
         discount = h["discount"] || 0 # TODO.
         return row + [d.rap_percentage, d.rap_percentage-discount]
       end
@@ -103,7 +104,7 @@ class ExcelController < ApplicationController
         sheet.sheet_view.zoom_scale=100
         rows.each {|row| sheet.add_row(row, style:default)}
         # apply the head style to the first row.
-        sheet.row_style 0, head
+        sheet.row_style (@headers_index || 0), head
       end
       begin 
         temp = Tempfile.new(filename, 'tmp') 
