@@ -58,14 +58,21 @@ class ExcelController < ApplicationController
 
   def domain_headers
     return @domain_headers if @domain_headers
-    keys_table = {'size'=>'ct.', 'clarity'=>'cla', 'color'=>'col', 'shape'=>'shape', 'cut'=>'cut', 'sym'=>'sym', 'flour' => 'fluo', 'polish'=>'pol'}
     @domain_headers = @headers.collect do |value|
-      if index = keys_table.values.find_index(safe_downcase(value))
-        keys_table.keys[index]
-      else
-        nil
-      end
+      translate_header_name value
     end
+  end
+
+  def headers_table
+    @headers_table ||= {'size'=>/^(ct\.?)|(carat)$/i, 'clarity'=>/^cla(rity)?$/i, 'color'=>/^col(our|or)?$/i, 'shape'=>/^shape$/i, 'cut'=>/^cut$/i, 'sym'=>/^sym(metry)?$/i, 'flour' => /^flu?or?$/i, 'polish'=>/^pol(ish)?$/i}
+  end
+
+  def translate_header_name value
+    value = safe_downcase(value)
+    headers_table.each do |key,reg|
+      return key if reg =~ value
+    end
+    nil
   end
 
   def process_row(row)
