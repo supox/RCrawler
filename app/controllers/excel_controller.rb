@@ -5,15 +5,21 @@ class ExcelController < ApplicationController
   end
 
   def modify
-    rows = load_excel (params[:file].path)
-    modified_rows = modify_rows(rows)
-    filename = "rap_data_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
-    send_excel filename, modified_rows
+    begin
+      raise 'Empty file.' if(!params[:file])
+      rows = load_excel (params[:file].path)
+      modified_row = modify_rows(rows)
+      filename = "#{params[:file].original_filename}_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+      send_excel filename, modified_rows
+    rescue => e
+      flash.now[:error] = "Error : #{e.message}"
+      render :index
+    end
   end
 
   def price_list
     rows = load_price_list
-    filename = "rap_price_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+    filename = "RapPrice_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
     send_excel filename, rows    
   end
 
@@ -97,7 +103,7 @@ class ExcelController < ApplicationController
     Axlsx::Package.new do |p|
       wb = p.workbook
       styles = wb.styles
-      head = styles.add_style :bg_color => "00", :fg_color => "FF", :sz => 12, :b => true
+      head = styles.add_style :sz => 10, :b => true, :border => { :style => :thick, :color=>"00" ,:edges => [:bottom]}
       default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER, :sz=>10)
 
       wb.add_worksheet(:name => "Diamonds") do |sheet|

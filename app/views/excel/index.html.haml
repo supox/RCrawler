@@ -1,7 +1,5 @@
 %h2 Import Products
 
 = form_tag excel_path, multipart: true do
-  = file_field_tag :file, accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel', style: 'display:inline'
+  = file_field_tag :file, accept: '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', style: 'display:inline'
   = submit_tag "Modify"
-
-
