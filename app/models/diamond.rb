@@ -4,9 +4,13 @@ class Diamond < ActiveRecord::Base
   self.per_page = 25  
 
   def self.search(search)
+    puts "----!"
+    puts search
     if search and search.respond_to? :map
       # white list
       search = Hash[search.map{ |k, v| [(k.to_sym if k.respond_to?('to_sym')), v] }]
+      puts "-----"
+      p search
       search_hash={}
       ranges.each do |k,v|
         search_hash[k] = search[k] if search[k] and search[k] != 'All'

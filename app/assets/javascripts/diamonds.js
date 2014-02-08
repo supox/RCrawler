@@ -1,5 +1,5 @@
 $(function() {
-  $("#diamonds th a, #diamonds .pagination a").on("click", function() {
+  $("#diamonds .pagination .next_page").on("click", function() {
     $.getScript(this.href);
     return false;
   });
@@ -12,4 +12,5 @@ function updateSearch(){
     $("#diamonds_search").serialize(),
     null,
     "script");
+  return false;
 }

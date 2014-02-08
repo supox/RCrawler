@@ -3,7 +3,7 @@
 %p
   = link_to 'Download excel', price_path 
 
-= semantic_form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search'}, method:'get') do |f|
+= semantic_form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search', :onsubmit=>'return updateSearch();'}, method:'get') do |f|
   .row
     - Diamond.ranges.each do |key, value|
       .span3
