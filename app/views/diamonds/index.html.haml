@@ -9,7 +9,7 @@
       %li
         = key.capitalize
         = f.select key, options_for_select(value.push('All'), 'All'), {}, 
-                :onchange=>"javascript: updateSearch();"
+          :onchange=>"javascript: updateSearch();"
     = f.submit "Search"
 
   %div#diamonds

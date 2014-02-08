@@ -6,6 +6,7 @@ gem 'rails', '4.0.2'
 
 group :development do
   gem 'sqlite3'
+  gem 'rails_layout'
 end
 group :production do
   gem 'pg', '0.15.1'
@@ -26,10 +27,10 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 group :development do
-    gem 'capistrano', '~> 3.1'
-    # rails specific capistrano funcitons
-    gem 'capistrano-rails', '~> 1.1.0'
-    gem 'capistrano-rvm'
+  gem 'capistrano', '~> 3.1'
+  # rails specific capistrano funcitons
+  gem 'capistrano-rails', '~> 1.1.0'
+  gem 'capistrano-rvm'
 end
 
 
@@ -39,6 +40,7 @@ gem 'formtastic-bootstrap'
 gem 'rubyzip',  "~> 1.1", require: 'zip'
 gem 'zip-zip'
 
+gem 'bootstrap-sass'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'

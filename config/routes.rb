@@ -5,6 +5,8 @@ RapCrawler::Application.routes.draw do
   post 'excel' => 'excel#modify'
   get 'price' => 'excel#price_list'
 
+  root 'excel#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
