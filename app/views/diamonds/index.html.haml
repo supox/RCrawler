@@ -1,16 +1,14 @@
-%h1 Listing diamonds
+%h1 Search diamonds price
 
 %p
-  = link_to 'Download excel', url_for(format:'xlsx')
+  = link_to 'Download excel', price_path 
 
-= form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search'}, method:'get') do |f|
-  %ul
+= semantic_form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search'}, method:'get') do |f|
+  .row
     - Diamond.ranges.each do |key, value|
-      %li
-        = key.capitalize
-        = f.select key, options_for_select(value.push('All'), 'All'), {}, 
-          :onchange=>"javascript: updateSearch();"
-    = f.submit "Search"
+      .span3
+        = f.input key, as: :select, collection: options_for_select(value.push('All'),'All'), :include_blank => false, onchange: "javascript: updateSearch();"
+  = f.action :submit, label:'Search', :button_html => {:class => "btn btn-primary"}
 
   %div#diamonds
     = render 'diamonds'

@@ -36,11 +36,10 @@ end
 
 gem 'formtastic'
 gem 'formtastic-bootstrap'
+gem 'bootstrap-sass'
 
 gem 'rubyzip',  "~> 1.1", require: 'zip'
 gem 'zip-zip'
-
-gem 'bootstrap-sass'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'

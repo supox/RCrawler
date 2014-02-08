@@ -1,15 +1,17 @@
--# navigation styled for Bootstrap 3.0
-%nav.navbar.navbar-default.navbar-fixed-top
-  .container
-    .navbar-header
-      %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
-        %span.sr-only Toggle navigation
+.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container
+      %button.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse", type: "button"}
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      = link_to 'Search', diamonds_path, class: 'navbar-brand'
-      = link_to 'Import excel', excel_path, class: 'navbar-brand'
-      = link_to 'Download price list', price_path, class: 'navbar-brand'
-    .collapse.navbar-collapse
-      %ul.nav.navbar-nav
-        = render 'layouts/navigation_links'
+      .brand RapCrawler
+      .nav-collapse.collapse
+        %ul.nav
+          %li
+            = link_to 'Search', diamonds_path
+          %li
+            = link_to 'Import excel', excel_path
+          %li
+            = link_to 'Price list', price_path
+
