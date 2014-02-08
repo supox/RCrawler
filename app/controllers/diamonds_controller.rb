@@ -4,8 +4,9 @@ class DiamondsController < ApplicationController
   # GET /diamonds
   # GET /diamonds.json
   def index
-    @search = params[:search] ? search_params : nil
-    @diamonds = Diamond.search(@search).paginate(:per_page => 25, :page => params[:page])
+    @search_params = params[:search] ? search_params : nil
+    @search = Diamond.new(@search_params)
+    @diamonds = Diamond.search(@search_params).paginate(:per_page => 25, :page => params[:page])
   end
 
   # GET /diamonds/1

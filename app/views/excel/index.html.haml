@@ -1,5 +1,5 @@
 %h2 Import Products
 
-= form_tag excel_path, multipart: true do
-  = file_field_tag :file, accept: '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', style: 'display:inline'
-  = submit_tag "Modify"
+= form_tag excel_path, class: 'form-inline', multipart: true do
+  = file_field_tag :file, class: 'input-small', accept: '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  = submit_tag "Proess file", class:'btn btn-primary'

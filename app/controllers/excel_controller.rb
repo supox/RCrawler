@@ -8,7 +8,7 @@ class ExcelController < ApplicationController
     begin
       raise 'Empty file.' if(!params[:file])
       rows = load_excel (params[:file].path)
-      modified_row = modify_rows(rows)
+      modified_rows = modify_rows(rows)
       filename = "#{params[:file].original_filename}_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
       send_excel filename, modified_rows
     rescue => e
