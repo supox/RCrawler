@@ -1,0 +1,10 @@
+namespace :deploy do
+  %w[start stop restart].each do |command|
+    desc "#{command} unicorn server"
+    task "#{command}_unicorn" do
+      on roles(:app, except: {no_release: true}) do
+        execute "/etc/init.d/unicorn_#{fetch(:application)} #{command}"
+      end
+    end
+  end
+end

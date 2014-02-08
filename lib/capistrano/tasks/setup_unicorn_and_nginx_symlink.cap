@@ -1,0 +1,12 @@
+namespace :deploy do
+  desc "Setup nginx and unicorn symbolic links"
+  task :setup_unicorn_and_nginx_symlink do
+    on roles(:app) do
+      sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{fetch(:application)}"
+      sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{fetch(:application)}"
+      execute "mkdir -p #{shared_path}/config"
+      put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
+      puts "Now edit the config files in #{shared_path}."
+    end
+  end
+end
