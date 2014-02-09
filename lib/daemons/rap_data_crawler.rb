@@ -51,8 +51,8 @@ class RapDataCrawler
 
   def login
     link = 'https://www.rapnet.com/login/loginpage.aspx'
-    username = '78276'
-    password = 'sschnitzer1'
+    username = CRAWLER_CONFIG["rap"]["username"]
+    password = CRAWLER_CONFIG["rap"]["password"]
     user_element_name = 'ctl00$cphMainContent$Login1$UserName'
     password_element_name = 'ctl00$cphMainContent$Login1$Password'
     login_element_name = 'ctl00$cphMainContent$Login1$LoginButton'
