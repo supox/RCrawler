@@ -26,5 +26,19 @@ class Diamond < ActiveRecord::Base
     v="Excellent"
     {size:0.3.step(1,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
   end
+
+  def percentage_with_offset
+    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage
+  end
+
+  def self.percentage_offset
+    begin
+      CRAWLER_CONFIG["price_list"]["extra_discount"]
+    rescue
+      0
+    end
+  end
+
+
 end
 

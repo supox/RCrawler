@@ -27,8 +27,9 @@ class ExcelController < ApplicationController
 
   def load_price_list
     ranges = Diamond.price_list_ranges
-    keys = ranges.keys + [:number_of_results, :rap_percentage]
+    keys = ranges.keys + [:number_of_results, :percentage_with_offset]
     headers = keys.collect{ |k| k.to_s.titleize}
+    headers[-1] = "%Rap"
     [headers] + Diamond.search(ranges).select{|d| (d.number_of_results || 0) > 0}.collect{|d| keys.collect{|key| d.send key }}
   end
 
@@ -93,7 +94,7 @@ class ExcelController < ApplicationController
       d = Diamond.search(h).first
       if d && d.number_of_results > 0
         discount = h["discount"] || 0 # TODO.
-        return row + [d.rap_percentage, d.rap_percentage-discount]
+        return row + [d.percentage_with_offset, d.percentage_with_offset-discount]
       end
     rescue => e
       p e
