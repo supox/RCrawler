@@ -28,7 +28,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def percentage_with_offset
-    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage
+    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage and self.number_of_results > 0
   end
 
   def self.percentage_offset

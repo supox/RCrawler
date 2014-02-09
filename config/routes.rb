@@ -1,5 +1,5 @@
 RapCrawler::Application.routes.draw do
-  resources :diamonds
+  resources :diamonds, only: [:index]
 
   get 'excel' => 'excel#index'
   post 'excel' => 'excel#modify'
