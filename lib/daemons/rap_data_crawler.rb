@@ -235,13 +235,16 @@ class RapDataCrawler
     logout_id = 'ctl00_Navigation2_lbtnLogOut'
 
     puts 'Logging out'
-    logout_element = @browser.find_element(:id, logout_id)
-    logout_element.click
+    begin
+      logout_element = @browser.find_element(:id, logout_id)
+      logout_element.click
+    rescue
+    end
   end
 
   def quit
-    puts 'Quiting'
-    @browser.quit
+    puts 'Quiting...'
+    @browser.quit if @browser
   end
 
   def select_value_of_element(element_type,element_tag,selected_value)

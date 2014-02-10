@@ -15,6 +15,9 @@ $running = true
 Signal.trap("TERM") do 
   $running = false
 end
+Signal.trap("INT") do 
+  $running = false
+end
 
 Rails.logger.info "RapDeamon - starting."
 tasker = RapTasker.new
@@ -23,13 +26,12 @@ crawler = RapDataCrawler.new
 while($running) do
   Rails.logger.info "RapDeamon - looping."
 
-  while t = tasker.next
+  while (t = tasker.next) and $running
     crawler.crawl t
   end
 
   crawler.close
 
-  sleep 2.days
+  sleep 2.days if $running
 end
-
-crawler.close
+puts "Done."
