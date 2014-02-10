@@ -155,7 +155,11 @@ class RapDataCrawler
   end
 
   def parse_result
-    puts "Parsing page."
+    unless @browser =~ /Results.aspx/
+      File.open("#{Dir.home}/bad_search.html") {|f| f.puts @browser.page_source} 
+      raise :not_result_page
+    end
+    puts "Parsing page"
 
     # parse current page
     data, number_of_results = parse_page(@browser.page_source)
@@ -173,8 +177,11 @@ class RapDataCrawler
   def parse_page(html)
     begin
       doc = Nokogiri::HTML(html)
-
-      return nil if doc.at_css('div#ctl00_cphMainContent_SummaryResults1_divNoResults')
+      
+      if doc.at_css('div#ctl00_cphMainContent_SummaryResults1_divNoResults')
+        puts 'No results.'
+        return nil
+      end
 
       number_of_results_content=doc.css('span#ctl00_cphMainContent_lblDiamondsCount').text
       number_of_results=/Found (\d+,?\d*)/.match(number_of_results_content)[1].gsub(',','').to_i
@@ -194,10 +201,11 @@ class RapDataCrawler
       end
       return data, number_of_results
     rescue Exception => ex  
-      puts "Failed parse page, message : #{ex.message}. Page url = '#{@browser.current_url}', page title = '#{@browser.title}'"
       if @browser.title =~ /login/i
         @opened = false
         raise :login_required
+      else
+        raise ex
       end
     end
   end
