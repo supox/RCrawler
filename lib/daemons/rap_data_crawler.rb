@@ -112,59 +112,46 @@ class RapDataCrawler
   end
 
   def search(search_link = 'http://www.rapnet.com/RapNet/Search/')
-    from_element_name = 'ctl00$cphMainContent$txtSizeFrom'
-    to_element_name = 'ctl00$cphMainContent$txtSizeTo'
-    search_element_name = 'ctl00$cphMainContent$btnSearch'
-    shape_select_id = 'ctl00_cphMainContent_lstShapes'
-    color_from_id = 'ctl00_cphMainContent_drpColorFrom'
-    color_to_id = 'ctl00_cphMainContent_drpColorTo'
-    clarity_from_id = 'ctl00_cphMainContent_drpClarityFrom'
-    clarity_to_id = 'ctl00_cphMainContent_drpClarityTo'
-    polish_from_id='ctl00_cphMainContent_drpPolishFrom'
-    polish_to_id='ctl00_cphMainContent_drpPolishTo'
-    sym_from_id='ctl00_cphMainContent_drpSymmFrom'
-    sym_to_id='ctl00_cphMainContent_drpSymmTo'
-    cut_from_id='ctl00_cphMainContent_drpCutFrom'
-    cut_to_id='ctl00_cphMainContent_drpCutTo'
-    flour_id='ctl00_cphMainContent_lstFluorescenceIntensity'
-    number_of_results_per_page_id = 'ctl00_cphMainContent_drpNumberOfResults'
-    latest_listing_id = 'ctl00_cphMainContent_chkLatestListings'
-    gia_checkbox_id = 'ctl00_cphMainContent_chklstGradingReport_0'
 
     puts 'Navigating to search page...'
     @browser.navigate.to search_link
+  
+    cut_and_polish_options = {"Excellent"=>2,"Very Good"=>3, "Good"=>4}
+    sym_options = {"Excellent"=>1,"Very Good"=>2, "Good"=>3}
+    color_options = {}
+    ('D'..'Z').each.with_index {|l,index| color_options[l]=index+1}
+    clarity_options = {"FL"=>1, "IF"=>2, "VVS1"=>3, "VVS2"=>4, "VS1"=>5, "VS2"=>6, "SI1"=>7, "SI2"=>8, "SI3"=>9, "I1"=>10, "I2"=>11, "I3"=>12}
+    flour_options = {"None"=>1,	"Very Slight"=>2}
 
-    puts "Filling fields for #{@params.inspect}"
-    # size
+    clarity = clarity_options[@params[:clarity]]
+    color = color_options[@params[:color]]
+    cut = cut_and_polish_options[@params[:cut]]
+    polish = cut_and_polish_options[@params[:polish]]
+    sym = sym_options[@params[:sym]]
+    flour = flour_options[@params[:flour]]
     from_size = @params[:size]
-    to_size = @params[:size] + 0.09
-    @browser.find_element(:name, from_element_name).send_keys from_size.to_s
-    @browser.find_element(:name, to_element_name).send_keys to_size.to_s
+    to_size = @params[:size] + 0.099
+  
+    puts "Filling fields for #{@params.inspect}"
+    change_values_script = %{
+      $('#ctl00_cphMainContent_lstShapes').val('1')    
+      $('#ctl00_cphMainContent_drpColorTo').val('#{color}');
+      $('#ctl00_cphMainContent_drpColorFrom').val('#{color}');
+      $('#ctl00_cphMainContent_txtSizeFrom').val('#{from_size}');
+      $('#ctl00_cphMainContent_txtSizeTo').val('#{to_size}');
+      $('#ctl00_cphMainContent_drpClarityFrom').val('#{clarity}');
+      $('#ctl00_cphMainContent_drpClarityTo').val('#{clarity}');
+      $('#ctl00_cphMainContent_drpCutFrom').val('#{cut}');
+      $('#ctl00_cphMainContent_drpCutTo').val('#{cut}');
+      $('#ctl00_cphMainContent_drpPolishFrom').val('#{polish}');
+      $('#ctl00_cphMainContent_drpPolishTo').val('#{polish}');
+      $('#ctl00_cphMainContent_drpSymmFrom').val('#{sym}');
+      $('#ctl00_cphMainContent_drpSymmTo').val('#{sym}');
+      $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true);      
+    }
+    @browser.execute_script change_values_script
 
-    # select_value_of_element(:id, number_of_results_per_page_id, "50")
-    select_value_of_element(:id, shape_select_id, "Round")
-    @browser.find_element(:id, gia_checkbox_id).click
-
-    dont_fill_to_fields = true
-    # clarity
-    select_value_of_element(:id, clarity_from_id, @params[:clarity])
-    select_value_of_element(:id, clarity_to_id, @params[:clarity]) unless dont_fill_to_fields
-    # color
-    select_value_of_element(:id, color_from_id, @params[:color])
-    select_value_of_element(:id, color_to_id, @params[:color]) unless dont_fill_to_fields
-    # sym
-    select_value_of_element(:id, sym_from_id, @params[:sym])
-    select_value_of_element(:id, sym_to_id, @params[:sym]) unless dont_fill_to_fields
-    # cut
-    select_value_of_element(:id, cut_from_id, @params[:cut])
-    select_value_of_element(:id, cut_to_id, @params[:cut]) unless dont_fill_to_fields
-    # polish
-    select_value_of_element(:id, polish_from_id, @params[:polish])
-    select_value_of_element(:id, polish_to_id, @params[:polish]) unless dont_fill_to_fields
-    # flour
-    select_value_of_element(:id, flour_id, @params[:flour])
-
-    @browser.find_element(:name, search_element_name).click
+    @browser.find_element(:name, 'ctl00$cphMainContent$btnSearch').click
   end
 
   def parse_result
@@ -208,7 +195,10 @@ class RapDataCrawler
       return data, number_of_results
     rescue Exception => ex  
       puts "Failed parse page, message : #{ex.message}. Page url = '#{@browser.current_url}', page title = '#{@browser.title}'"
-      raise :login_required if @browser.title =~ /login/i
+      if @browser.title =~ /login/i
+        @opened = false
+        raise :login_required
+      end
     end
   end
 
