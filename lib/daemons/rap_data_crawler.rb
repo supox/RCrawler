@@ -100,9 +100,10 @@ class RapDataCrawler
   def fetch_row
     tries = 0
     begin
+      open unless opened?
       search
       parse_result	
-    rescue  => e
+    rescue => e
       tries += 1
       retry unless tries >= 3
       puts "Could not load data for #{@params} (#{tries}/3). Reason = #{e}. Page title = #{@browser.title}."
@@ -207,6 +208,7 @@ class RapDataCrawler
       return data, number_of_results
     rescue Exception => ex  
       puts "Failed parse page, message : #{ex.message}. Page url = '#{@browser.current_url}', page title = '#{@browser.title}'"
+      raise :login_required if @browser.title =~ /login/i
     end
   end
 
