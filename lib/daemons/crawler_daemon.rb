@@ -29,5 +29,5 @@ while($running) do
 
   crawler.close
 
-  sleep 2.hours
+  sleep 2.days
 end

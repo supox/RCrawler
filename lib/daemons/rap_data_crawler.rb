@@ -4,8 +4,7 @@ require 'nokogiri'
 class RapDataCrawler
 
   def open
-    puts 'Starting browser...'
-    @browser = get_chrome
+    @browser ||= get_browser
     @opened = login
   end
 
@@ -20,13 +19,23 @@ class RapDataCrawler
   end
 
   def crawl diamond    
-    open unless opened?
+    until opened? do
+      if not open
+        puts "Could not log-in, sleeping for 1 minute and try again."
+        sleep 1.minute
+      end
+    end
     @params = diamond
     fetch_row
   end
 
   private
 
+  def get_browser
+    puts 'Starting browser...'
+    get_chrome
+  end
+  
   def get_firefox
     profile = Selenium::WebDriver::Firefox::Profile.new
     ## Disable CSS
@@ -70,8 +79,12 @@ class RapDataCrawler
     pass_element.send_keys password
     login_element.click
 
-    puts "Title = #{@browser.title}"
+    if @browser.current_url =~ /AlreadyLoggedIn/
+      puts "Login failed. Reason : already logged-in from another location."
+      return false
+    end
 
+    puts "Logged-in. Page url = #{@browser.current_url}, page title = #{@browser.title}"
     true
   end
 
@@ -83,7 +96,7 @@ class RapDataCrawler
     rescue  => e
       tries += 1
       retry unless tries >= 3
-      puts "Could not load data for #{@params}. Reason = #{e}" 
+      puts "Could not load data for #{@params} (#{tries}/3). Reason = #{e}. Page title = #{@browser.title}."
       false
     end
   end
@@ -145,24 +158,19 @@ class RapDataCrawler
   end
 
   def parse_result
-    begin
-      puts "Parsing page."
+    puts "Parsing page."
 
-      # parse current page
-      data, number_of_results = parse_page(@browser.page_source)
-      if data
-        relevant_stone = find_relevant_stone data
-        rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i
-      else
-        rap_percentage = 0
-        number_of_results = 0
-      end
-      @params.update!({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round"})
-      # get_next_page
-    rescue Exception => ex
-      # probably could not find next button, dump and continue
-      puts "#{ex.backtrace}: #{ex.message} (#{ex.class})"
+    # parse current page
+    data, number_of_results = parse_page(@browser.page_source)
+    if data
+      relevant_stone = find_relevant_stone data
+      rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i
+    else
+      rap_percentage = 0
+      number_of_results = 0
     end
+    @params.update!({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round"})
+    # get_next_page
   end
 
   def parse_page(html)
