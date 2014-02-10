@@ -99,16 +99,13 @@ class RapDataCrawler
   end
 
   def fetch_row
-    tries = 0
     begin
       open unless opened?
       search
       parse_result	
     rescue => e
-      tries += 1
-      retry unless tries >= 3
-      puts "Could not load data for #{@params} (Tried #{tries} times). Reason = #{e}. Sleeping for 10 seconds before trying again."
-      sleep 10.second
+      puts "Could not load data for #{@params}. Reason = #{e}. Sleeping for 20 seconds before trying again."
+      sleep 20.second
       false
     end
   end
