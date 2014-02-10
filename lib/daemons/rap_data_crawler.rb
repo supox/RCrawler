@@ -28,6 +28,7 @@ class RapDataCrawler
         sleep 1.minute
       end
     end
+    
     @params = diamond
     fetch_row
   end
@@ -106,7 +107,8 @@ class RapDataCrawler
     rescue => e
       tries += 1
       retry unless tries >= 3
-      puts "Could not load data for #{@params} (#{tries}/3). Reason = #{e}. Page title = #{@browser.title}."
+      puts "Could not load data for #{@params} (Tried #{tries} times). Reason = #{e}. Sleeping for 10 seconds before trying again."
+      sleep 10.second
       false
     end
   end
@@ -132,7 +134,7 @@ class RapDataCrawler
     from_size = @params[:size]
     to_size = @params[:size] + 0.099
   
-    puts "Filling fields for #{@params.inspect}"
+    puts "Filling fields for #{@params.inspect} at page #{@browser.current_url}"
     change_values_script = %{
       $('#ctl00_cphMainContent_lstShapes').val('1')    
       $('#ctl00_cphMainContent_drpColorTo').val('#{color}');
@@ -148,11 +150,12 @@ class RapDataCrawler
       $('#ctl00_cphMainContent_drpSymmFrom').val('#{sym}');
       $('#ctl00_cphMainContent_drpSymmTo').val('#{sym}');
       $('#ctl00_cphMainContent_lstFluorescenceIntensity').val('#{flour}');
-      $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true);      
+      $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true);
+      $('#ctl00_cphMainContent_btnSearch').click();
     }
     @browser.execute_script change_values_script
-
-    @browser.find_element(:name, 'ctl00$cphMainContent$btnSearch').click
+    # @browser.find_element(:name, 'ctl00$cphMainContent$btnSearch').click
+    
   end
 
   def parse_result
@@ -166,7 +169,7 @@ class RapDataCrawler
     data, number_of_results = parse_page(@browser.page_source)
     if data
       relevant_stone = find_relevant_stone data
-      rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i
+      rap_percentage = /(-?\d+)%/.match(relevant_stone["%/Rap"])[1].to_i rescue 0
     else
       rap_percentage = 0
       number_of_results = 0
