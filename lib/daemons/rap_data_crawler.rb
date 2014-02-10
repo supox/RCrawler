@@ -240,6 +240,7 @@ class RapDataCrawler
     begin
       logout_element = @browser.find_element(:id, logout_id)
       logout_element.click
+      @opened = false
     rescue
     end
   end
