@@ -147,6 +147,7 @@ class RapDataCrawler
       $('#ctl00_cphMainContent_drpPolishTo').val('#{polish}');
       $('#ctl00_cphMainContent_drpSymmFrom').val('#{sym}');
       $('#ctl00_cphMainContent_drpSymmTo').val('#{sym}');
+      $('#ctl00_cphMainContent_lstFluorescenceIntensity').val('#{flour}');
       $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true);      
     }
     @browser.execute_script change_values_script
@@ -155,9 +156,9 @@ class RapDataCrawler
   end
 
   def parse_result
-    unless @browser =~ /Results.aspx/
-      File.open("#{Dir.home}/bad_search.html") {|f| f.puts @browser.page_source} 
-      raise :not_result_page
+    unless @browser.current_url =~ /Results.aspx/
+      File.open("#{Dir.home}/bad_search.html", 'w') {|f| f.puts @browser.page_source} 
+      raise "not in results page"
     end
     puts "Parsing page"
 
@@ -203,7 +204,7 @@ class RapDataCrawler
     rescue Exception => ex  
       if @browser.title =~ /login/i
         @opened = false
-        raise :login_required
+        raise "login required."
       else
         raise ex
       end

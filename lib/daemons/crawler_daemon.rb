@@ -15,9 +15,6 @@ $running = true
 Signal.trap("TERM") do 
   $running = false
 end
-Signal.trap("INT") do 
-  $running = false
-end
 
 Rails.logger.info "RapDeamon - starting."
 tasker = RapTasker.new
