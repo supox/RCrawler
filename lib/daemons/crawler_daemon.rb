@@ -31,3 +31,5 @@ while($running) do
 
   sleep 2.days
 end
+
+crawler.close

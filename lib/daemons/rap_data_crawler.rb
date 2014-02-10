@@ -9,9 +9,12 @@ class RapDataCrawler
   end
 
   def close
-    logout
-    quit
-    puts 'Done.'	
+    begin
+      logout
+      quit
+    rescue
+    end
+    puts 'Closed crawler.'	
   end
 
   def opened?
@@ -32,6 +35,12 @@ class RapDataCrawler
   private
 
   def get_browser
+    if CRAWLER_CONFIG["start_xvsb"]
+      puts 'Starting xvsb display adapter'
+      system('Xvfb :1 -screen 5 1024x768x8 &')
+      system('export DISPLAY=:1.5')
+    end
+  
     puts 'Starting browser...'
     get_chrome
   end
