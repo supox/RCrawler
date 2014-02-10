@@ -206,7 +206,7 @@ class RapDataCrawler
       end
       return data, number_of_results
     rescue Exception => ex  
-      puts "#{ex.backtrace}: #{ex.message} (#{ex.class})"
+      puts "Failed parse page, message : #{ex.message}. Page url = '#{@browser.current_url}', page title = '#{@browser.title}'"
     end
   end
 
