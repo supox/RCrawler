@@ -1,6 +1,6 @@
 class Diamond < ActiveRecord::Base
-  #acts_as_xlsx columns:[:size, :clarity, :color, :sym, :cut, :polish, :flour, :updated_at]
 
+  default_scope order('created_at')
   self.per_page = 25  
 
   def self.search(search)
