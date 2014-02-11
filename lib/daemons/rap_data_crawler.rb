@@ -104,8 +104,10 @@ class RapDataCrawler
       open unless opened?
       search
       parse_result	
+      Rails.logger.info "Updated data for #{@params}."
     rescue => e
       puts "Could not load data for #{@params}. Reason = #{e}. Sleeping for 20 seconds before trying again."
+      Rails.logger.info "Could not load data for #{@params}. Reason = #{e}"
       sleep 20.second
       false
     end
