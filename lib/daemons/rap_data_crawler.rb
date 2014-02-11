@@ -36,7 +36,7 @@ class RapDataCrawler
   private
 
   def get_browser
-    if CRAWLER_CONFIG["start_xvsb"]
+    if CRAWLER_CONFIG["start_xvsb"] and (not Rails.env.development?)
       puts 'Starting xvsb display adapter'
       system('killall Xvfb')
       ENV['DISPLAY']=':1.5'

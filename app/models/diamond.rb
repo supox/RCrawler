@@ -1,6 +1,5 @@
 class Diamond < ActiveRecord::Base
-
-  default_scope order('created_at')
+  default_scope { order(:created_at => :asc) }
   self.per_page = 25  
 
   def self.search(search)

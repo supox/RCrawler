@@ -15,7 +15,7 @@ class RapTasker
   end
 
   def next
-    Diamond.where('updated_at < ?', 0.days.ago).order(:updated_at).first
+    Diamond.unscoped.where('updated_at < ?', 0.days.ago).order(:updated_at).first
   end
 
   private
