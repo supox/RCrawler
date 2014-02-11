@@ -39,8 +39,8 @@ class RapDataCrawler
     if CRAWLER_CONFIG["start_xvsb"]
       puts 'Starting xvsb display adapter'
       system('killall Xvfb')
+      ENV['DISPLAY']=':1.5'
       system('Xvfb :1 -screen 5 1024x768x8 &')
-      system('export DISPLAY=:1.5')
     end
   
     puts 'Starting browser...'
