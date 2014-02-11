@@ -38,6 +38,7 @@ class RapDataCrawler
   def get_browser
     if CRAWLER_CONFIG["start_xvsb"]
       puts 'Starting xvsb display adapter'
+      system('killall Xvfb')
       system('Xvfb :1 -screen 5 1024x768x8 &')
       system('export DISPLAY=:1.5')
     end
