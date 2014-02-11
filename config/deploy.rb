@@ -85,9 +85,8 @@ set(:symlinks, [
 namespace :deploy do
   # make sure we're deploying what we think we're deploying
   before :deploy, "deploy:check_revision"
-  # compile assets locally then rsync
-  after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
+
   after :finishing, 'deploy:cleanup'
   after :finishing, 'deploy:restart_unicorn'
-
+  after :finishing, 'deploy:restart_crawler'
 end

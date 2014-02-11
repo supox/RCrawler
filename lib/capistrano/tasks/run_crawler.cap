@@ -1,0 +1,13 @@
+namespace :deploy do
+  %w[start stop restart].each do |command|
+    desc "#{command} rap crawler"
+    task "#{command}_crawler" do
+      on roles(:app, except: {no_release: true}) do
+        # execute "cd #{release_path} && #{fetch(:rvm_path)}/rvm bundle exec rake daemon:crawler_daemon:#{command} RAILS_ENV=production"
+        within release_path do
+          execute :rake, "daemon:crawler_daemon:#{command} RAILS_ENV=production"
+        end
+      end
+    end
+  end
+end
