@@ -106,6 +106,9 @@ class RapDataCrawler
       parse_result	
       Rails.logger.info "Updated data for #{@params}."
     rescue => e
+      if @browser.current_url =~ /LoginPage/
+        @opened=false
+      end
       puts "Could not load data for #{@params}. Reason = #{e}. Sleeping for 20 seconds before trying again."
       Rails.logger.info "Could not load data for #{@params}. Reason = #{e}"
       sleep 20.second
