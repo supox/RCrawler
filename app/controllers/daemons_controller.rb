@@ -20,6 +20,11 @@ class DaemonsController < ApplicationController
     redirect_to daemons_path, :flash => {:info => "Daemon restarted. #{r}"}
   end
 
+  def logs
+    lines = params[:lines] || 1000
+    @logs = `tail -n #{lines} log/crawler_daemon.rb.output`
+  end
+
   private
 
   def assign_daemon

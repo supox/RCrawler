@@ -5,6 +5,7 @@ RapCrawler::Application.routes.draw do
       put :start
       put :stop
       put :restart
+      get :logs
     end
   end
 

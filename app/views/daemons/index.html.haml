@@ -12,4 +12,5 @@
   %dd
     -[:start, :stop, :restart].each do |action|
       = link_to action.to_s.titleize, {action: action}, :method => :put
+    = link_to 'Logs', action: :logs
  
