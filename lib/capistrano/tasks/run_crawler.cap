@@ -5,7 +5,7 @@ namespace :deploy do
       on roles(:app, except: {no_release: true}) do
         # execute "cd #{release_path} && #{fetch(:rvm_path)}/rvm bundle exec rake daemon:crawler_daemon:#{command} RAILS_ENV=production"
         within release_path do
-          execute :rake, "daemon:crawler_daemon:#{command} RAILS_ENV=#{fetch :rails_env}"
+          execute :rake, "daemon:crawler_daemon:#{command} RAILS_ENV=#{fetch(:rails_env) || fetch(:stage)}"
         end
       end
     end
