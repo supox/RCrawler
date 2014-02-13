@@ -1,5 +1,12 @@
 RapCrawler::Application.routes.draw do
   resources :diamonds, only: [:index]
+  resources :daemons, only: [:index] do
+    collection do
+      put :start
+      put :stop
+      put :restart
+    end
+  end
 
   get 'excel' => 'excel#index'
   post 'excel' => 'excel#modify'

@@ -1,0 +1,15 @@
+- h = {not_exists: "Not running", running: "Running"}
+
+%h1 Daemons
+%dl
+  -[:path, :app_name].each do |prop|
+    %dt= prop.to_s.titleize
+    %dd= @daemon.send prop
+  %dt Status
+  %dd
+    %b= h[@daemon.status] || @daemon.status.titleise
+  %dt Actions
+  %dd
+    -[:start, :stop, :restart].each do |action|
+      = link_to action.to_s.titleize, {action: action}, :method => :put
+ 
