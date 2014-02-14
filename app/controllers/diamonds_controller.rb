@@ -13,10 +13,10 @@ class DiamondsController < ApplicationController
     end
 
     def search_params
-      params.require(:search).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour)
+      params.require(:search).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour, :sort_by)
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def diamond_params
-      params.require(:diamond).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour, :number_of_results, :rap_percentage)
+      params.require(:diamond).permit(:shape, :size, :color, :clarity, :cut, :polish, :sym, :flour, :number_of_results, :rap_percentage, :sort_by)
     end
 end

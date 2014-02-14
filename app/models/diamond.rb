@@ -1,24 +1,15 @@
 class Diamond < ActiveRecord::Base
-  default_scope { order(:created_at => :asc) }
   self.per_page = 25  
+  attr_accessor :sort_by 
 
   def self.search(search)
-    if search and search.respond_to? :map
-      # white list
-      search = Hash[search.map{ |k, v| [(k.to_sym if k.respond_to?('to_sym')), v] }]
-      search_hash={}
-      ranges.each do |k,v|
-        search_hash[k] = search[k] if search[k] and search[k] != 'All'
-      end
-      where(search_hash)
-    else
-      all
-    end
+    order = search[:sort_by].downcase rescue :created_at
+    search_no_sort(search).order(order)
   end
 
   def self.ranges 
     v=["Excellent","Very Good", "Good"]
-    {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:["None", "Very Slight"]}
+    {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, flour:["None", "Very Slight"], sym:v.dup, cut:v.dup, polish:v.dup}
   end
 
   def self.price_list_ranges
@@ -38,6 +29,21 @@ class Diamond < ActiveRecord::Base
     end
   end
 
+  private
+  def self.search_no_sort(search)
+    if search and search.respond_to? :map
+      # white list
+      search = Hash[search.map{ |k, v| [(k.to_sym if k.respond_to?('to_sym')), v] }]
+      search_hash={}
+      ranges.each do |k,v|
+        search_hash[k] = search[k] if search[k] and search[k] != 'All' and k != :sort_by
+      end
+      return where(search_hash)
+    else
+      return all
+    end
+
+  end
 
 end
 

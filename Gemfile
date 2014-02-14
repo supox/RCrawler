@@ -22,6 +22,9 @@ group :development, :test do
   gem 'shoulda-matchers'
 end
 
+# for PP command.
+gem 'awesome_print'
+
 # Use unicorn as the app server
 gem 'unicorn'
 

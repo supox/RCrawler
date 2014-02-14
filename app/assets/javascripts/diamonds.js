@@ -14,7 +14,7 @@ function showLoadingBar() {
 }
 
 function updateSearch(){
-  showLoadingBar()
+  showLoadingBar();
   $.get(
     $("#diamonds_search").attr("action"),
     $("#diamonds_search").serialize(),
