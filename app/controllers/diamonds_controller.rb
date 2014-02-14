@@ -3,7 +3,7 @@ class DiamondsController < ApplicationController
   def index
     @search_params = params[:search] ? search_params : nil
     @search = Diamond.new(@search_params)
-    @diamonds = Diamond.search(@search_params).paginate(:per_page => 25, :page => params[:page])
+    @diamonds = Diamond.search(@search_params).paginate(:per_page => (params[:per_page] || 25), :page => params[:page])
   end
 
   private
