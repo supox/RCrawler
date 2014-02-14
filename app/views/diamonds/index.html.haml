@@ -5,15 +5,16 @@
 
 = semantic_form_for(@search, url:diamonds_path,as: :search, html:{id:'diamonds_search', :onsubmit=>'return updateSearch();'}, method:'get') do |f|
   - ranges = Diamond.ranges
-  .row
-    - ranges.each do |key, value|
-      .span3
-        = f.input key, as: :select, collection: options_for_select(value.push('All'),'All'), :include_blank => false, :input_html =>{onchange: "javascript: updateSearch();"}
-    .span3.row
-      %div
-        =f.input :sort_by, as: :select, collection: options_for_select(Hash[Diamond.search_by_options.collect{|k| [k.to_s.titleize,k]}]), include_blank: false, :input_html => {onchange: "javascript: updateSearch();"}
-      %div
-        =f.input :asc, as: :boolean, :input_html => {onchange: "javascript: updateSearch();"}
+  - ranges.each_slice(4) do |h|
+    - current_ranges = Hash[h]
+    .row
+      - current_ranges.each do |key, value|
+        .span3
+          = f.input key, as: :select, collection: options_for_select(value.push('All'),'All'), :include_blank => false, :input_html =>{onchange: "javascript: updateSearch();"}
+        - if key == ranges.keys.last
+          .span3
+            =f.input :sort_by, as: :select, collection: options_for_select(Hash[Diamond.search_by_options.collect{|k| [k.to_s.titleize,k]}]), include_blank: false, :input_html => {onchange: "javascript: updateSearch();"}
+            =f.input :asc, as: :boolean, :input_html => {onchange: "javascript: updateSearch();"}
 
   = f.action :submit, label:'Search', :button_html => {:class => "btn btn-primary"}
 
