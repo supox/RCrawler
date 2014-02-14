@@ -1,0 +1,12 @@
+/home/supox/.rvm/rubies/ruby-2.0.0-p353/bin/ruby extconf.rb 
+creating Makefile
+
+make "DESTDIR=" clean
+
+make "DESTDIR="
+compiling atomic_reference.c
+linking shared-object atomic_reference.so
+
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 atomic_reference.so ./.gem.20140214-27312-k3jqco
+installing default atomic_reference libraries
