@@ -23,7 +23,7 @@ class Diamond < ActiveRecord::Base
 
   def self.price_list_ranges
     v="Excellent"
-    {size:0.3.step(1,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
+    {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
   end
 
   def percentage_with_offset
