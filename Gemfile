@@ -36,8 +36,8 @@ group :development do
   gem 'capistrano-rvm'
 end
 
-
-gem 'formtastic'
+# gem 'formtastic'
+gem 'formtastic', github: 'justinfrench/formtastic', branch: 'rails4beta' 
 gem 'formtastic-bootstrap'
 gem 'bootstrap-sass'
 

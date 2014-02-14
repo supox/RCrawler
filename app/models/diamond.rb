@@ -1,10 +1,11 @@
 class Diamond < ActiveRecord::Base
   self.per_page = 25  
-  attr_accessor :sort_by 
+  attr_accessor :sort_by, :asc
 
   def self.search(search)
     order = search[:sort_by].downcase rescue :created_at
-    search_no_sort(search).order(order)
+    asc = (search[:asc]=='1' ? :asc : :desc) rescue :desc
+    search_no_sort(search).order(order=>asc)
   end
 
   def self.ranges 
@@ -15,6 +16,10 @@ class Diamond < ActiveRecord::Base
   def self.price_list_ranges
     v="Excellent"
     {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
+  end
+
+  def self.search_by_options
+    ranges.collect{|k,v| k} + ['updated_at', 'number_of_results', 'rap_percentage']
   end
 
   def percentage_with_offset
