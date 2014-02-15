@@ -14,7 +14,11 @@
         - if key == ranges.keys.last
           .span3
             =f.input :sort_by, as: :select, collection: options_for_select(Hash[Diamond.search_by_options.collect{|k| [k.to_s.titleize,k]}]), include_blank: false, :input_html => {onchange: "javascript: updateSearch();"}
-            =f.input :asc, as: :boolean, :input_html => {onchange: "javascript: updateSearch();"}
+            .boolean.input.optional.control-group#search_asc_input
+              %input{name:"search[asc]",type:"hidden", value:"0"}
+              .controls
+                %label{class:'checkbox', for:"search_asc", onchange:"javascript: updateSearch();"}
+                  %input{id:"search_asc", name:"search[asc]", onchange:"javascript: updateSearch();", type:"checkbox", value:"1"} Asc
 
   = f.action :submit, label:'Search', :button_html => {:class => "btn btn-primary"}
 
