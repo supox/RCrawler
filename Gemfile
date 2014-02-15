@@ -37,7 +37,7 @@ group :development do
 end
 
 # gem 'formtastic'
-gem 'formtastic', github: 'justinfrench/formtastic', branch: 'rails4beta' 
+gem 'formtastic', git: 'git@github.com:justinfrench/formtastic.git', branch: 'rails4beta' 
 gem 'formtastic-bootstrap'
 gem 'bootstrap-sass'
 

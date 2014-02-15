@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/justinfrench/formtastic.git
+  remote: git@github.com:justinfrench/formtastic.git
   revision: 325282e64a897cd92c78d44d48726fe16486f84a
   branch: rails4beta
   specs:
