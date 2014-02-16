@@ -4,7 +4,8 @@ class Diamond < ActiveRecord::Base
 
   def self.search(search)
     order = search[:sort_by].downcase rescue :created_at
-    asc = (search[:asc]=='1' ? :asc : :desc) rescue :desc
+    order = :created_at if order.to_sym == :default
+    asc = (search[:asc]=='1' ? :asc : :desc) rescue :asc
     search_no_sort(search).order(order=>asc)
   end
 
@@ -19,7 +20,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def self.search_by_options
-    ranges.collect{|k,v| k} + ['updated_at', 'number_of_results', 'rap_percentage']
+    ['default'] + ranges.keys + ['updated_at', 'number_of_results', 'rap_percentage']
   end
 
   def percentage_with_offset

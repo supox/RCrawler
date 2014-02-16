@@ -18,7 +18,7 @@
               %input{name:"search[asc]",type:"hidden", value:"0"}
               .controls
                 %label{class:'checkbox', for:"search_asc", onchange:"javascript: updateSearch();"}
-                  %input{id:"search_asc", name:"search[asc]", onchange:"javascript: updateSearch();", type:"checkbox", value:"1"} Asc
+                  %input{id:"search_asc", name:"search[asc]", onchange:"javascript: updateSearch();", type:"checkbox", value:"1", checked:true} Asc
 
   = f.action :submit, label:'Search', :button_html => {:class => "btn btn-primary"}
 
