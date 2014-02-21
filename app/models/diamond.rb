@@ -20,7 +20,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def self.search_by_options
-    ['default'] + ranges.keys + ['updated_at', 'number_of_results', 'rap_percentage']
+    ['default'] + ranges.keys + ['number_of_results', 'rap_percentage']
   end
 
   def percentage_with_offset
