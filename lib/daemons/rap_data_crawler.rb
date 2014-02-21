@@ -177,7 +177,7 @@ class RapDataCrawler
       rap_percentage = 0
       number_of_results = 0
     end
-    @params.update!({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round"})
+    @params.update!({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round", updated_at:Time.now})
     # get_next_page
   end
 

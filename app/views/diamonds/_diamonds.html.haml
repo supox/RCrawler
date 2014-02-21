@@ -14,7 +14,7 @@
     %th Sym
     %th Number of results
     %th Rap percentage
-    -# %th Last updated
+    %th Last updated
 
   - @diamonds.each do |diamond|
     %tr
@@ -28,7 +28,7 @@
       %td= diamond.sym
       %td= diamond.number_of_results
       %td= diamond.percentage_with_offset
-      -# %td= diamond.updated_at
+      %td= diamond.updated_at
 
 %br
 
