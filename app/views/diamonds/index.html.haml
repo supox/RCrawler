@@ -8,9 +8,11 @@
   - ranges.each_slice(4) do |h|
     - current_ranges = Hash[h]
     .row
-      - current_ranges.each do |key, value|
+      - current_ranges.each do |key, values|
         .span3
-          = f.input key, as: :select, collection: options_for_select(value.push('All'),'All'), :include_blank => false, :input_html =>{onchange: "javascript: updateSearch();"}
+          - if key==:size
+            - values = values.collect{|s| [s.to_size_range, s]}
+          = f.input key, as: :select, collection: options_for_select(values.push('All'),'All'), :include_blank => false, :input_html =>{onchange: "javascript: updateSearch();"}
         - if key == ranges.keys.last
           .span3
             =f.input :sort_by, as: :select, collection: options_for_select(Hash[Diamond.search_by_options.collect{|k| [k.to_s.titleize,k]}]), include_blank: false, :input_html => {onchange: "javascript: updateSearch();"}

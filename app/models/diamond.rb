@@ -11,12 +11,12 @@ class Diamond < ActiveRecord::Base
 
   def self.ranges 
     v=["Excellent","Very Good", "Good"]
-    {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, flour:["None", "Very Slight"], sym:v.dup, cut:v.dup, polish:v.dup}
+    {size:size_range, clarity: clarity_range, color:color_range, flour:["None", "Faint", "Medium", "Strong"], sym:v.dup, cut:v.dup, polish:v.dup}
   end
 
   def self.price_list_ranges
     v="Excellent"
-    {size:0.3.step(3,0.1).collect {|f| f.round(1)}, clarity: ["VS1", "VVS2", "VVS1", "IF"], color:("D".."M").to_a, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
+    {size:size_range, clarity: clarity_range, color:color_range, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
   end
 
   def self.search_by_options
@@ -24,7 +24,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def percentage_with_offset
-    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage and self.number_of_results > 0
+    (self.rap_percentage + Diamond.percentage_offset) if self.rap_percentage and self.number_of_results > 0
   end
 
   def self.percentage_offset
@@ -36,6 +36,7 @@ class Diamond < ActiveRecord::Base
   end
 
   private
+
   def self.search_no_sort(search)
     if search and search.respond_to? :map
       # white list
@@ -51,5 +52,16 @@ class Diamond < ActiveRecord::Base
 
   end
 
+  def self.size_range
+    0.3.step(3,0.1).collect {|f| f.round(1)}
+  end
+
+  def self.clarity_range
+    ["I1", "SI2","SI1","VS2", "VS1", "VVS2", "VVS1", "IF"]
+  end
+
+  def self.color_range
+    ("D".."M").to_a
+  end
 end
 

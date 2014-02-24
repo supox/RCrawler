@@ -19,7 +19,7 @@
   - @diamonds.each do |diamond|
     %tr
       %td= diamond.shape
-      %td= diamond.size
+      %td= diamond.size.to_size_range
       %td= diamond.color
       %td= diamond.flour
       %td= diamond.clarity

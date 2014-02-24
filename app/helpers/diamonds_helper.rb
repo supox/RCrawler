@@ -1,6 +1,13 @@
 module DiamondsHelper
 end
 
+class Numeric
+  def to_size_range
+    "#{self}-#{(self+0.09).round(2)}"
+  end
+end
+
+
 
 module Daemons
   module Rails

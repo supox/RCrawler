@@ -126,8 +126,7 @@ class RapDataCrawler
     color_options = {}
     ('D'..'Z').each.with_index {|l,index| color_options[l]=index+1}
     clarity_options = {"FL"=>1, "IF"=>2, "VVS1"=>3, "VVS2"=>4, "VS1"=>5, "VS2"=>6, "SI1"=>7, "SI2"=>8, "SI3"=>9, "I1"=>10, "I2"=>11, "I3"=>12}
-    flour_options = {"None"=>1,	"Very Slight"=>2}
-
+    flour_options = {"None"=>1, "Very Slight"=>2, "Faint"=>3, "Medium"=>4, "Strong"=>5, "Very Strong"=>6}
     clarity = clarity_options[@params[:clarity]]
     color = color_options[@params[:color]]
     cut = cut_and_polish_options[@params[:cut]]
@@ -136,10 +135,11 @@ class RapDataCrawler
     flour = flour_options[@params[:flour]]
     from_size = @params[:size]
     to_size = @params[:size] + 0.099
+    shape = 1 # Round
   
     puts "Filling fields for #{@params.inspect} at page #{@browser.current_url}"
     change_values_script = %{
-      $('#ctl00_cphMainContent_lstShapes').val('1')    
+      $('#ctl00_cphMainContent_lstShapes').val('#{shape}')    
       $('#ctl00_cphMainContent_drpColorTo').val('#{color}');
       $('#ctl00_cphMainContent_drpColorFrom').val('#{color}');
       $('#ctl00_cphMainContent_txtSizeFrom').val('#{from_size}');
@@ -153,7 +153,7 @@ class RapDataCrawler
       $('#ctl00_cphMainContent_drpSymmFrom').val('#{sym}');
       $('#ctl00_cphMainContent_drpSymmTo').val('#{sym}');
       $('#ctl00_cphMainContent_lstFluorescenceIntensity').val('#{flour}');
-      $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true);
+      $('#ctl00_cphMainContent_chklstGradingReport_0').prop('checked', true); // GIA Lab
       $('#ctl00_cphMainContent_btnSearch').click();
     }
     @browser.execute_script change_values_script
@@ -219,7 +219,8 @@ class RapDataCrawler
 
   def find_relevant_stone data
     data = data.keep_if {|row| /(-?\d+)%/.match(row["%/Rap"])}
-    data[33] || data.last
+    data_row = [0, data.size * 2 / 3, 33].sort[1]
+    data[data_row]
   end
 
   def get_next_page
