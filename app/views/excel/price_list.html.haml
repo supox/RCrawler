@@ -1,0 +1,24 @@
+%h1 Price list
+
+- cla = @ranges[:clarity].reverse
+- colors = @ranges[:color]
+- @ranges[:size].each_slice(2).each do |size_slice|
+  .row
+    -size_slice.each do |size|
+      - h = Hash.new{|h, k| h[k] = {}}
+      - @results.where(size:size).each {|d| h[d.color][d.clarity] = d}
+      .span5
+        %table.table.table-rap.table-condensed
+          %tr
+            %td.center{colspan:(cla.size+1)}
+              = size.to_size_range
+          %tr
+            %th
+            - cla.each do |c|
+              %th= c.upcase
+          - colors.each do |col|
+            %tr
+              %td= col.upcase
+              -cla.each do |cla|
+                %td= h[col][cla].percentage_with_offset rescue ""
+
