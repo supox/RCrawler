@@ -91,7 +91,7 @@ class ExcelController < ApplicationController
       ["sym", "cut", "polish"].each do |key|
         h[key] = transform_table[safe_downcase(h[key])]
       end
-      flou_table = {"n"=>"None", "f"=>"Faint"}
+      flou_table = {"n"=>"None", "f"=>"Faint", "mt"=>"Medium", "mb"=>"Medium", "med"=>"Medium", "medium"=>"Medium", "st"=>"Strong", "sb"=>"Strong", "strong"=>"Strong", "s"=>"Strong"}
       h["flour"] = flou_table[safe_downcase(h["flour"])]
       shape_table = {"br"=>"Round"}
       h["shape"] = shape_table[safe_downcase(h["shape"])]
