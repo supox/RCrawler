@@ -24,7 +24,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def percentage_with_offset
-    (self.rap_percentage + Diamond.percentage_offset) if self.rap_percentage and valid_to_show?
+    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage and valid_to_show?
   end
 
   def number_of_results_to_display
@@ -34,7 +34,7 @@ class Diamond < ActiveRecord::Base
 
   def self.percentage_offset
     begin
-      CRAWLER_CONFIG["price_list"]["extra_discount"]
+      CRAWLER_CONFIG["price_list"]["extra_discount"] || 0
     rescue
       0
     end

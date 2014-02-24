@@ -52,7 +52,7 @@ class ExcelController < ApplicationController
   end
 
   def process_header(row)
-    return (row + ["",""]) if row.select{|d| d}.size < 3
+    return (row + ["",""]) if row.select{|d| d && !d.to_s.blank?}.size < 3
     @headers = row
     @header_found = true
     row + ["Target Rap%", "Modified Rap%"]
@@ -63,10 +63,6 @@ class ExcelController < ApplicationController
     @domain_headers = @headers.collect do |value|
       translate_header_name value
     end
-
-    p @headers
-    p @domain_headers
-    @domain_headers
   end
 
   def headers_table
@@ -97,7 +93,7 @@ class ExcelController < ApplicationController
       h["shape"] = shape_table[safe_downcase(h["shape"])]
       h["size"] = h["size"].to_f.round(1)
 
-      return nil unless h["shape"] and h["flour"] and h["size"] and h["sym"] and h["cut"] and h["polish"]
+      raise "empty row: #{h.inspect}" unless h["shape"] and h["flour"] and h["size"] and h["sym"] and h["cut"] and h["polish"]
 
       d = Diamond.search(h).first
       if d && (d.number_of_results_to_display || 0) > 0
