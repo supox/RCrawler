@@ -97,6 +97,8 @@ class ExcelController < ApplicationController
       h["shape"] = shape_table[safe_downcase(h["shape"])]
       h["size"] = h["size"].to_f.round(1)
 
+      return nil unless h["shape"] and h["flour"] and h["size"] and h["sym"] and h["cut"] and h["polish"]
+
       d = Diamond.search(h).first
       if d && (d.number_of_results_to_display || 0) > 0
         discount = h["discount"] || 0 # TODO.
