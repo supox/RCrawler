@@ -11,12 +11,12 @@ class Diamond < ActiveRecord::Base
 
   def self.ranges 
     v=["Excellent","Very Good", "Good"]
-    {size:size_range, clarity: clarity_range, color:color_range, flour:["None", "Faint", "Medium", "Strong"], sym:v.dup, cut:v.dup, polish:v.dup}
+    {size:size_range, color:color_range, clarity: clarity_range, flour:["None", "Faint", "Medium", "Strong"], cut:v.dup, polish:v.dup, sym:v.dup }
   end
 
   def self.price_list_ranges
     v="Excellent"
-    {size:size_range, clarity: clarity_range, color:color_range, sym:v.dup, cut:v.dup, polish:v.dup, flour:"None"} 
+    {size:size_range, color:color_range, clarity: clarity_range, cut:v.dup, polish:v.dup, sym:v.dup, flour:"None"} 
   end
 
   def self.search_by_options
