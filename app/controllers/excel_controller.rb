@@ -30,7 +30,7 @@ class ExcelController < ApplicationController
     keys = ranges.keys + [:number_of_results, :percentage_with_offset]
     headers = keys.collect{ |k| k.to_s.titleize}
     headers[-1] = "%Rap"
-    [headers] + Diamond.search(ranges).select{|d| (d.number_of_results || 0) > 0}.collect{|d| keys.collect{|key| d.send key }}
+    [headers] + Diamond.search(ranges).select{|d| (d.number_of_results_to_display || 0) > 0}.collect{|d| keys.collect{|key| d.send key }}
   end
 
   def load_excel filename 
@@ -92,7 +92,7 @@ class ExcelController < ApplicationController
       h["shape"] = shape_table[safe_downcase(h["shape"])]
 
       d = Diamond.search(h).first
-      if d && d.number_of_results > 0
+      if d && (d.number_of_results_to_display || 0) > 0
         discount = h["discount"] || 0 # TODO.
         return row + [d.percentage_with_offset, d.percentage_with_offset-discount]
       end

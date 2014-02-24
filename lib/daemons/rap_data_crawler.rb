@@ -166,7 +166,6 @@ class RapDataCrawler
       File.open("#{Dir.home}/bad_search.html", 'w') {|f| f.puts @browser.page_source} 
       raise "not in results page"
     end
-    puts "Parsing page"
 
     # parse current page
     data, number_of_results = parse_page(@browser.page_source)
@@ -177,6 +176,9 @@ class RapDataCrawler
       rap_percentage = 0
       number_of_results = 0
     end
+
+    puts "Parsed page, number of results = #{number_of_results}, %Rap = #{rap_percentage}"
+
     @params.update!({number_of_results:number_of_results, rap_percentage: rap_percentage, shape:"Round", updated_at:Time.now})
     # get_next_page
   end
