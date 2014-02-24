@@ -19,9 +19,11 @@ class ExcelController < ApplicationController
   end
 
   def price_list
-    rows = load_price_list
-    filename = "RapPrice_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
-    send_excel filename, rows    
+    # rows = load_price_list
+    # filename = "RapPrice_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+    # send_excel filename, rows    
+    @ranges = Diamond.price_list_ranges
+    @results = Diamond.search(@ranges)
   end
 
   private

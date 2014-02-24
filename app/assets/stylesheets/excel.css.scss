@@ -1,3 +1,26 @@
 // Place all the styles related to the Excel controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.table-rap {
+  border: 8px solid black;
+  tbody {
+    td:first-child {
+      background-color:black;
+      color:white;
+      border:0px;
+    }
+    th:first-child {
+      @extend td:first-child;
+    }
+    th {
+      border-bottom: 2px solid;
+    }
+    td.center {
+      background-color:black;
+      color:white;
+      text-align:center;
+      font-weight:bold;
+    }
+  }
+}
