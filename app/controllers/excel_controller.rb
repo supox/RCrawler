@@ -91,10 +91,11 @@ class ExcelController < ApplicationController
       ["sym", "cut", "polish"].each do |key|
         h[key] = transform_table[safe_downcase(h[key])]
       end
-      flou_table = {"n"=>"None", "f"=>"Very Slight"}
+      flou_table = {"n"=>"None", "f"=>"Faint"}
       h["flour"] = flou_table[safe_downcase(h["flour"])]
       shape_table = {"br"=>"Round"}
       h["shape"] = shape_table[safe_downcase(h["shape"])]
+      h["size"] = h["size"].to_f.round(1)
 
       d = Diamond.search(h).first
       if d && (d.number_of_results_to_display || 0) > 0
