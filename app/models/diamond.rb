@@ -28,7 +28,8 @@ class Diamond < ActiveRecord::Base
   end
 
   def number_of_results_to_display
-    self.number_of_results if valid_to_show?
+    return self.number_of_results if valid_to_show?
+    0
   end
 
   def self.percentage_offset
@@ -40,10 +41,18 @@ class Diamond < ActiveRecord::Base
   end
 
   def valid_to_show?
-    self.number_of_results >= (CRAWLER_CONFIG["price_list"]["min_number_of_results_to_display"] || 50 rescue 50)
+    (self.number_of_results || 0) >= min_number_of_results_to_display
   end
 
   private
+
+  def min_number_of_results_to_display
+    begin
+      CRAWLER_CONFIG["price_list"]["min_number_of_results_to_display"] || 50
+    rescue
+      50
+    end
+  end
 
   def self.search_no_sort(search)
     if search and search.respond_to? :map

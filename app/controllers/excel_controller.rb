@@ -63,10 +63,14 @@ class ExcelController < ApplicationController
     @domain_headers = @headers.collect do |value|
       translate_header_name value
     end
+
+    p @headers
+    p @domain_headers
+    @domain_headers
   end
 
   def headers_table
-    @headers_table ||= {'size'=>/^(ct\.?)|(carat)$/i, 'clarity'=>/^cla(rity)?$/i, 'color'=>/^col(our|or)?$/i, 'shape'=>/^shape$/i, 'cut'=>/^cut$/i, 'sym'=>/^sym(metry)?$/i, 'flour' => /^flu?or?$/i, 'polish'=>/^pol(ish)?$/i}
+    @headers_table ||= {'size'=>/\A(ct\.?)|(carat)\z/i, 'clarity'=>/\Acla(rity)?\z/i, 'color'=>/\Acol(our|or)?\z/i, 'shape'=>/\Ashape\z/i, 'cut'=>/\Acut\z/i, 'sym'=>/\Asym(metry)?\z/i, 'flour' => /\Aflu?or?\z/i, 'polish'=>/\Apol(ish)?\z/i}
   end
 
   def translate_header_name value
