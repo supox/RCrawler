@@ -14,7 +14,8 @@ class ExcelController < ApplicationController
       send_excel filename, modified_rows
     rescue => e
       flash.now[:error] = "Error : #{e.message}"
-      render :index
+      # render :index
+      raise e
     end
   end
 
@@ -37,9 +38,8 @@ class ExcelController < ApplicationController
   end
 
   def load_excel filename 
-    doc = SimpleXlsxReader.open(filename)
-    sheet = doc.sheets.first
-    sheet.rows  
+    workbook = RubyXL::Parser.parse filename, skip_filename_check:true, data_only:true
+    workbook.worksheets[0].extract_data
   end
 
   def modify_rows rows
@@ -118,6 +118,10 @@ class ExcelController < ApplicationController
   end
 
   def send_excel(filename, rows)
+    # Fix rows to be rectangle
+    max_size = rows.map(&:size).max
+    rows.each{|r| r << nil while r.size < max_size}
+
     Axlsx::Package.new do |p|
       wb = p.workbook
       styles = wb.styles
