@@ -23,7 +23,7 @@ class ExcelController < ApplicationController
     # filename = "RapPrice_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
     # send_excel filename, rows    
     @ranges = Diamond.price_list_ranges
-    @results = Diamond.search(@ranges)
+    @results = Diamond.search(@ranges).where('number_of_results > 0')
   end
 
   private
@@ -79,25 +79,29 @@ class ExcelController < ApplicationController
     nil
   end
 
+  def sparams
+    @sparams ||= %w{shape flour size clarity sym cut polish color}
+  end
+
   def process_row(row)
     na_row = ["N/A", "N/A"]
     begin
       h=Hash[domain_headers.zip(row)]
 
       # transform values to domain:
-      transform_table={"ex"=>"Excellent","vg"=>"Very Good", "g"=>"Good"}
+      @transform_table ||={"ex"=>"Excellent","vg"=>"Very Good", "g"=>"Good"}
       ["sym", "cut", "polish"].each do |key|
-        h[key] = transform_table[safe_downcase(h[key])]
+        h[key] = @transform_table[safe_downcase(h[key])]
       end
-      flou_table = {"n"=>"None", "f"=>"Faint", "mt"=>"Medium", "mb"=>"Medium", "med"=>"Medium", "medium"=>"Medium", "st"=>"Strong", "sb"=>"Strong", "strong"=>"Strong", "s"=>"Strong"}
-      h["flour"] = flou_table[safe_downcase(h["flour"])]
-      shape_table = {"br"=>"Round"}
-      h["shape"] = shape_table[safe_downcase(h["shape"])]
+      @flou_table ||= {"n"=>"None", "f"=>"Faint", "mt"=>"Medium", "mb"=>"Medium", "med"=>"Medium", "medium"=>"Medium", "st"=>"Strong", "sb"=>"Strong", "strong"=>"Strong", "s"=>"Strong"}
+      h["flour"] = @flou_table[safe_downcase(h["flour"])]
+      @shape_table ||= {"br"=>"Round"}
+      h["shape"] = @shape_table[safe_downcase(h["shape"])]
       h["size"] = h["size"].to_f.round(1)
 
-      raise "empty row: #{h.inspect}" unless h["shape"] and h["flour"] and h["size"] and h["sym"] and h["cut"] and h["polish"]
+      raise "empty row: #{h.inspect}" unless sparams.all?{|p| h[p]}
 
-      d = Diamond.search(h).first
+      d = Diamond.search(h).select(:number_of_results).first
       if d && (d.number_of_results_to_display || 0) > 0
         discount = h["discount"] || 0 # TODO.
         return row + [d.percentage_with_offset, d.percentage_with_offset-discount]

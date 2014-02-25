@@ -6,7 +6,7 @@
   .row
     -size_slice.each do |size|
       - h = Hash.new{|h, k| h[k] = {}}
-      - @results.where(size:size).each {|d| h[d.color][d.clarity] = d}
+      - @results.where(size:size).all.each {|d| h[d.color][d.clarity] = d}
       .span5
         %table.table.table-rap.table-condensed
           %tr
