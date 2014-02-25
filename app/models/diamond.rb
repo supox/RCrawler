@@ -9,6 +9,10 @@ class Diamond < ActiveRecord::Base
     search_no_sort(search).order(order=>asc)
   end
 
+  def self.find_with_number_of_results(search)
+    search_no_sort(search).select(:number_of_results).first
+  end
+
   def self.ranges 
     v=["Excellent","Very Good", "Good"]
     {size:size_range, color:color_range, clarity: clarity_range, flour:["None", "Faint", "Medium", "Strong"], cut:v.dup, polish:v.dup, sym:v.dup }
@@ -62,7 +66,7 @@ class Diamond < ActiveRecord::Base
       ranges.each do |k,v|
         search_hash[k] = search[k] if search[k] and search[k] != 'All' and k != :sort_by
       end
-      return where(search_hash)
+      return unscoped.where(search_hash)
     else
       return all
     end

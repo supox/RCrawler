@@ -14,15 +14,11 @@ class ExcelController < ApplicationController
       send_excel filename, modified_rows
     rescue => e
       flash.now[:error] = "Error : #{e.message}"
-      # render :index
-      raise e
+      render :index
     end
   end
 
   def price_list
-    # rows = load_price_list
-    # filename = "RapPrice_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
-    # send_excel filename, rows    
     @ranges = Diamond.price_list_ranges
     @results = Diamond.search(@ranges).where('number_of_results > 0')
   end
@@ -101,7 +97,7 @@ class ExcelController < ApplicationController
 
       raise "empty row: #{h.inspect}" unless sparams.all?{|p| h[p]}
 
-      d = Diamond.search(h).select(:number_of_results).first
+      d = Diamond.find_with_number_of_results(h)
       if d && (d.number_of_results_to_display || 0) > 0
         discount = h["discount"] || 0 # TODO.
         return row + [d.percentage_with_offset, d.percentage_with_offset-discount]
