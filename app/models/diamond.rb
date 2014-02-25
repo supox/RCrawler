@@ -78,7 +78,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def self.clarity_range
-    ["I1", "SI2","SI1","VS2", "VS1", "VVS2", "VVS1", "IF"]
+    ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"]
   end
 
   def self.color_range
