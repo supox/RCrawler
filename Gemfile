@@ -55,7 +55,9 @@ gem 'selenium-webdriver'
 gem 'nokogiri'
 gem 'will_paginate' 
 gem 'jquery-rails'
+
+# Excel
 gem 'axlsx'
-# gem 'simple_xlsx_reader'
 gem 'rubyXL'
+# gem 'simple_xlsx_reader'
 
