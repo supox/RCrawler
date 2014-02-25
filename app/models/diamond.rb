@@ -10,7 +10,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def self.find_with_number_of_results(search)
-    search_no_sort(search).select(:number_of_results).first
+    search_no_sort(search).select(:number_of_results, :rap_percentage).first
   end
 
   def self.ranges 
@@ -28,7 +28,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def percentage_with_offset
-    (self.rap_percentage - Diamond.percentage_offset) if self.rap_percentage and valid_to_show?
+    (self.rap_percentage + Diamond.percentage_offset) if self.rap_percentage and valid_to_show?
   end
 
   def number_of_results_to_display
