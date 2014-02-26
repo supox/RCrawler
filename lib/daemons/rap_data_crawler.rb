@@ -221,8 +221,7 @@ class RapDataCrawler
 
   def find_relevant_stone data
     data = data.keep_if {|row| /(-?\d+)%/.match(row["%/Rap"])}
-    data_row = [0, data.size * 2 / 3, 33].sort[1]
-    data[data_row]
+    data[33] || data.last
   end
 
   def get_next_page
