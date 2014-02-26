@@ -48,6 +48,18 @@ class Diamond < ActiveRecord::Base
     (self.number_of_results || 0) >= min_number_of_results_to_display
   end
 
+  def self.dedupe
+    # find all models and group them on keys which should be common
+    grouped = all.group_by{|model| [model.size,model.color,model.cut,model.polish, model.clarity, model.flour, model.sym] }
+    grouped.values.each do |duplicates|
+      # the first one we want to keep right?
+      first_one = duplicates.shift # or pop for last one
+      # if there are any more left, they are duplicates
+      # so delete all of them
+      duplicates.each{|double| double.destroy} # duplicates can now be destroyed
+    end
+  end
+
   private
 
   def min_number_of_results_to_display
@@ -84,5 +96,6 @@ class Diamond < ActiveRecord::Base
   def self.color_range
     ("D".."M").to_a
   end
+
 end
 
