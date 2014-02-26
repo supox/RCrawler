@@ -38,7 +38,7 @@ class Diamond < ActiveRecord::Base
 
   def self.percentage_offset
     begin
-      Setting.price_list["extra_discount"] || 0
+      Setting.price_list[:extra_discount] || 0
     rescue
       0
     end
@@ -64,7 +64,7 @@ class Diamond < ActiveRecord::Base
 
   def min_number_of_results_to_display
     begin
-      Setting.price_list["min_number_of_results_to_display"] || 50
+      Setting.price_list[:min_number_of_results_to_display] || 50
     rescue
       50
     end
