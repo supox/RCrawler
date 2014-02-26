@@ -8,12 +8,12 @@ start_xvsb: true
 ranges:
   size:
     start: 0.3
-    end: 1.5
+    end: 1.4
   cut: ["Excellent"]
   polish: ["Excellent"]
   sym: ["Excellent"]
-  clarity: ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"]
+  clarity: ["VS2", "SI1", "SI2", "I1"]  # ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"]
   color:
     start: "D"
     end: "M"
-  flour: ["None", "Faint", "Medium", "Strong"]
+  flour: ["None"] #["None", "Faint", "Medium", "Strong"]
