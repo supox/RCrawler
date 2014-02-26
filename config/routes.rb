@@ -1,4 +1,9 @@
 RapCrawler::Application.routes.draw do
+  
+  #resources :setting
+  get 'settings' => 'settings#edit', defaults:{id:1}
+  patch 'settings' => 'settings#update', defaults:{id:1}
+
   resources :diamonds, only: [:index]
   resources :daemons, only: [:index] do
     collection do

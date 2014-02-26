@@ -20,4 +20,19 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      setting:
+        price_list_extra_discount: Extra discount
+        price_list_min_number_of_results_to_display: Minimum number of results to display
+        ranges_size_start: Size (start)
+        ranges_size_end: Size (end)
+        ranges_cut: Cut
+        ranges_polish: Polish
+        ranges_sym: Symmetry
+        ranges_clarity: Clarity
+        ranges_color_start: Color (start)
+        ranges_color_end: Color (end)
+        ranges_flour: Fluorescence
+           
+

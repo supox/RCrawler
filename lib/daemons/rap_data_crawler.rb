@@ -36,7 +36,7 @@ class RapDataCrawler
   private
 
   def get_browser
-    if CRAWLER_CONFIG["start_xvsb"] and (not Rails.env.development?)
+    if Setting.xvsb? and (not Rails.env.development?)
       puts 'Starting xvsb display adapter'
       system('killall Xvfb')
       ENV['DISPLAY']=':1.5'
@@ -71,8 +71,8 @@ class RapDataCrawler
 
   def login
     link = 'https://www.rapnet.com/login/loginpage.aspx'
-    username = CRAWLER_CONFIG["rap"]["username"]
-    password = CRAWLER_CONFIG["rap"]["password"]
+    username = Setting.rap[:username]
+    password = Setting.rap[:password]
     user_element_name = 'ctl00$cphMainContent$Login1$UserName'
     password_element_name = 'ctl00$cphMainContent$Login1$Password'
     login_element_name = 'ctl00$cphMainContent$Login1$LoginButton'

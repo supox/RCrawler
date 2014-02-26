@@ -1,0 +1,6 @@
+= semantic_form_for @setting, url:settings_path do |f|
+  - columns = Setting.column_names.dup - %w{id rap_username rap_password start_xvfb created_at updated_at}
+  - columns.each do |col|
+    = f.input col.to_sym
+  .actions
+    = f.actions
