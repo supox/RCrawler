@@ -15,7 +15,10 @@ class RapTasker
   end
 
   def next
-    Diamond.unscoped.where('updated_at < ?', 0.days.ago).order(:updated_at).first
+    sizes = 0.3.step(1.5,0.1).collect {|f| f.round(1)}
+    options = {size: sizes, cut:"Excellent", polish:"Excellent", sym:"Excellent" }
+
+    Diamond.unscoped.where(options).where('updated_at < ?', 0.days.ago).order(:updated_at).first
   end
 
   private
