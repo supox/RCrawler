@@ -134,7 +134,7 @@ class RapDataCrawler
     sym = sym_options[@params[:sym]]
     flour = flour_options[@params[:flour]]
     from_size = @params[:size]
-    to_size = @params[:size] + 0.099
+    to_size = @params[:size] + 0.09
     shape = 1 # Round
   
     puts "Filling fields for #{@params.inspect} at page #{@browser.current_url}"
