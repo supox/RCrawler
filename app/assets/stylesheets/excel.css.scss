@@ -28,11 +28,14 @@ table.table-rap {
 
 @media print 
 {
+  body{
+    padding:0px;
+  }
   div.print4 {
     width:33%;
   } 
   table.table-rap{
-    font-size:50%;
+    font-size:65%;
     border:0px;
     th {
       border:0px;
