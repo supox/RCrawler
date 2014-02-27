@@ -24,3 +24,19 @@ table.table-rap {
     }
   }
 }
+
+
+@media print 
+{
+  div.print4 {
+    width:33%;
+  } 
+  table.table-rap{
+    font-size:50%;
+    border:0px;
+    th {
+      border:0px;
+    }
+
+  }
+}

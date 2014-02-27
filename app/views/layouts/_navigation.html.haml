@@ -1,19 +1,20 @@
-.navbar.navbar-inverse.navbar-fixed-top
-  .navbar-inner
-    .container
-      %button.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse", type: "button"}
+.navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
+  .container
+    .navbar-header
+      %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", type: "button"}
+        %span.sr-only Toggle navigation
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      .brand RapCrawler
-      .nav-collapse.collapse
-        %ul.nav
-          %li
-            = link_to 'Search', diamonds_path
-          %li
-            = link_to 'Import excel', excel_path
-          %li
-            = link_to 'Price list', price_path
-          %li
-            = link_to 'Crawler settings', settings_path
-
+      %a.navbar-brand{href: "/"} RapCrawler 
+    .collapse.navbar-collapse
+      %ul.nav.navbar-nav
+        %li
+          = link_to 'Search', diamonds_path
+        %li
+          = link_to 'Import excel', excel_path
+        %li
+          = link_to 'Price list', price_path
+        %li
+          = link_to 'Crawler settings', settings_path
+ 

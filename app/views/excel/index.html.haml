@@ -1,5 +1,6 @@
-%h2 Add Rap percent to Excel 
+%h2 Add %/Rap to Excel sheet 
 
-= form_tag excel_path, class: 'form-inline', multipart: true do
-  = file_field_tag :file, class: 'input-small', accept: '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+= form_tag excel_path, class: 'form-inline', role:'form', multipart: true do
+  .form-group
+    = file_field_tag :file, accept: '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   = submit_tag "Proess file", class:'btn btn-primary'

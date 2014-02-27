@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    -# %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
     %title= content_for?(:title) ? yield(:title) : 'Rap Crawler'
     %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'Rap Crawler'}"}
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
@@ -10,6 +10,6 @@
   %body
     %header
       = render 'layouts/navigation'
-    %container{:role => "main"}
+    .container    
       = render 'layouts/messages'
       = yield

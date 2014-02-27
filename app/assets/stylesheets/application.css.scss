@@ -14,5 +14,13 @@
  */
 
 body {
-  padding: 40px;
+  padding-top: 50px;
+  padding-bottom: 20px;  
 }
+
+@media print 
+{
+  table {page-break-inside:avoid;}
+}
+ 
+@import "bootstrap";

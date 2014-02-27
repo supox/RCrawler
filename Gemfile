@@ -37,13 +37,13 @@ group :development do
 end
 
 # gem 'formtastic'
+gem 'sass-rails', '>= 3.2' # sass-rails needs to be higher than 3.2
 gem 'formtastic'#, git: 'git@github.com:justinfrench/formtastic.git', branch: 'rails4beta' 
 gem 'formtastic-bootstrap'
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '~> 3.1.1'
 
 gem 'rubyzip',  "~> 1.1", require: 'zip'
 gem 'zip-zip'
-gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'
 gem 'turbolinks'
@@ -61,3 +61,4 @@ gem 'axlsx'
 gem 'rubyXL'
 # gem 'simple_xlsx_reader'
 
+ 
