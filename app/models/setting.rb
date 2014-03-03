@@ -1,6 +1,4 @@
 class Setting < ActiveRecord::Base
-  after_save :after_setting_callback
-
   def self.rap
     {username:s.rap_username, password:s.rap_password}
   end
@@ -29,20 +27,11 @@ class Setting < ActiveRecord::Base
   end
 
   def self.s
-    @@s ||= first
-  end
-
-  def after_setting_callback
-    Setting.reload_settings
-  end
-
-  def self.reload_settings
-    @@s=nil
-    self
+    first
   end
 
   def self.crawling_ranges
-    ranges = self.reload_settings.ranges
+    ranges = self.ranges
 
     sizes = ranges[:size][:start].step(ranges[:size][:end],0.1).collect {|f| f.round(1)}
     search_ranges = {"size" => sizes}
@@ -52,11 +41,6 @@ class Setting < ActiveRecord::Base
     search_ranges["color"] = (ranges[:color][:start]..ranges[:color][:end]).to_a
 
     search_ranges
-  end
-
-  private
-  def after_setting_callback
-    Setting.reload_settings
   end
 
 end
