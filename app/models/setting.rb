@@ -1,4 +1,6 @@
 class Setting < ActiveRecord::Base
+  after_save :after_setting_callback
+
   def self.rap
     {username:s.rap_username, password:s.rap_password}
   end
@@ -30,6 +32,10 @@ class Setting < ActiveRecord::Base
     @@s ||= first
   end
 
+  def after_setting_callback
+    Setting.reload_settings
+  end
+
   def self.reload_settings
     @@s=nil
     self
@@ -48,6 +54,10 @@ class Setting < ActiveRecord::Base
     search_ranges
   end
 
+  private
+  def after_setting_callback
+    Setting.reload_settings
+  end
 
 end
 
