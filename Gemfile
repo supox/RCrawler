@@ -22,6 +22,9 @@ group :development, :test do
   gem 'shoulda-matchers'
 end
 
+# Devise
+gem 'devise'
+
 # for PP command.
 gem 'awesome_print'
 

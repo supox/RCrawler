@@ -64,7 +64,7 @@ class SettingsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_setting
-      @setting = Setting.find(params[:id])
+      @setting = Setting.find_or_create_by(id:params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
