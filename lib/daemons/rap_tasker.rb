@@ -15,7 +15,9 @@ class RapTasker
   end
 
   def next
-    Diamond.unscoped.where(Setting.crawling_ranges).where('updated_at < ?', 0.days.ago).order(:updated_at).first
+    entries = Diamond.ordered_by_last_update
+    offset = rand([entries.count,100].min) # Choose randomily from the first 100 entries
+    entries.first(offset:offset)
   end
 
   private

@@ -26,6 +26,14 @@ class Setting < ActiveRecord::Base
     }
   end
 
+  def self.sleep_time
+    return s.sleep_time || 0
+  end
+
+  def self.search_with_capy
+    true
+  end
+
   def self.s
     first
   end

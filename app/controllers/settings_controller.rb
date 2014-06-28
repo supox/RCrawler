@@ -69,6 +69,6 @@ class SettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def setting_params
-      params.require(:setting).permit(:rap_username, :rap_password, :price_list_extra_discount, :price_list_min_number_of_results_to_display, :start_xvfb, :ranges_size_start, :ranges_size_end, :ranges_cut, :ranges_polish, :ranges_sym, :ranges_clarity, :ranges_color_start, :ranges_color_end, :ranges_flour)
+      params.require(:setting).permit(:rap_username, :rap_password, :price_list_extra_discount, :price_list_min_number_of_results_to_display, :start_xvfb, :ranges_size_start, :ranges_size_end, :ranges_cut, :ranges_polish, :ranges_sym, :ranges_clarity, :ranges_color_start, :ranges_color_end, :ranges_flour, :sleep_time)
     end
 end

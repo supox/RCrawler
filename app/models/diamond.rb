@@ -60,6 +60,10 @@ class Diamond < ActiveRecord::Base
     end
   end
 
+  def self.ordered_by_last_update
+    unscoped.where(Setting.crawling_ranges).where('updated_at < ?', 0.days.ago).order(:updated_at)
+  end
+
   private
 
   def min_number_of_results_to_display
