@@ -1,0 +1,36 @@
+%h1 Listing adjustments
+
+= will_paginate
+
+%table.table.table-striped.table-bordered.table-condensed
+  %tr
+    %th Size
+    %th Color
+    %th Clarity
+    %th Cut VG
+    %th Cut G
+    %th Sym VG
+    %th Sym G
+    %th Pol VG
+    %th Pol G
+    %th Flor Faint
+    %th Flor Medium
+    %th Flor Strong
+    %th
+
+  - @adjustments.each do |adjustment|
+    %tr
+      %td= adjustment.size
+      %td= adjustment.color
+      %td= adjustment.clarity
+
+      - button_id = "update_btn_#{adjustment.id}"
+      = semantic_form_for adjustment, remote: true, html:{onsubmit:"$('##{button_id}').attr('value','Updating...');"} do |f|
+        - columns = %w{cut_vg cut_g sym_vg sym_g pol_vg pol_g flor_faint flor_medium flor_strong}
+        - columns.each do |col|
+          %td= f.input col.to_sym, label: false 
+        %td= f.action :submit, label: "Update", button_html: { :class => "btn btn-primary", id: button_id}
+
+%br
+= will_paginate
+

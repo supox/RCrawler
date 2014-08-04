@@ -11,10 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140628102411) do
+ActiveRecord::Schema.define(version: 20140802143524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "adjustments", force: true do |t|
+    t.decimal  "size"
+    t.string   "color"
+    t.string   "clarity"
+    t.integer  "cut_vg"
+    t.integer  "cut_g"
+    t.integer  "sym_vg"
+    t.integer  "sym_g"
+    t.integer  "pol_vg"
+    t.integer  "pol_g"
+    t.integer  "flor_faint"
+    t.integer  "flor_medium"
+    t.integer  "flor_strong"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "admins", force: true do |t|
     t.string   "email",              default: "", null: false

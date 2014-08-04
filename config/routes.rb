@@ -1,5 +1,7 @@
 RapCrawler::Application.routes.draw do
   
+  resources :adjustments
+
   devise_for :admins, :skip => :registrations 
   #resources :setting
   get 'settings' => 'settings#edit', defaults:{id:1}

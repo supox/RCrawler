@@ -121,6 +121,12 @@ class RapDataCrawler
 
     puts 'Navigating to search page...'
     
+    # popup hack:
+    click_script = %{
+      $(".ClosingStrip.CloseInlineModalWindow")[0].click()
+    }
+    @browser.execute_script click_script
+
     # Direct link: (disabled)
     # search_link = 'http://www.rapnet.com/RapNet/Search/'
     # @browser.navigate.to search_link
