@@ -24,11 +24,17 @@ while($running) do
   Rails.logger.info "RapDeamon - looping."
 
   while (t = tasker.next) and $running
+    begin
     crawler.crawl t
+    rescue => e
+      Rails.logger.info "Crawler error: #{e}"
+      sleep 10.seconds
+    end
   end
 
   crawler.close
 
-  sleep 2.days if $running
+  Rails.logger.info "RapDeamon - sleeping."
+  sleep 1.hour if $running
 end
 puts "Done."

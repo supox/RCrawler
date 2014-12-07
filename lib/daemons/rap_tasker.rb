@@ -16,6 +16,7 @@ class RapTasker
 
   def next
     entries = Diamond.ordered_by_last_update
+    return nil if entries.count == 0
     offset = rand([entries.count,100].min) # Choose randomily from the first 100 entries
     entries.first(offset:offset)
   end

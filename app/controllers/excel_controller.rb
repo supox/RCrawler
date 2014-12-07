@@ -6,7 +6,7 @@ class ExcelController < ApplicationController
 
   def modify
     begin
-      raise 'Empty file.' if(!params[:file])
+      raise 'Empty file.' unless params[:file]
       rows = load_excel (params[:file].path)
       modified_rows = modify_rows(rows)
       base_filename = File.basename(params[:file].original_filename, ".*")
