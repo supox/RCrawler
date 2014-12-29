@@ -23,6 +23,16 @@ class ExcelController < ApplicationController
     @results = Diamond.search(@ranges).where('number_of_results > 0')
   end
 
+  def ajdustment_sheet
+    ranges = Diamond.price_list_ranges
+    keys = ranges.keys + [:price_offset]
+    headers = keys.collect{ |k| k.to_s.titleize}
+    rows = [headers] + Diamond.search(ranges).select{|d| !(d.cut=="Excellent" && d.polish=="Excellent" && d.sym=="Excellent" && d.flour=="None")}.collect{|d| keys.collect{|key| d.send key }}
+
+    filename = "offsets_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
+    send_excel filename, rows
+  end
+
   private
 
   def load_price_list

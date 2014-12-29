@@ -20,6 +20,7 @@ RapCrawler::Application.routes.draw do
   get 'excel' => 'excel#index'
   post 'excel' => 'excel#modify'
   get 'price' => 'excel#price_list'
+  get 'adjust' => 'excel#ajdustment_sheet'
 
   root 'excel#index'
 

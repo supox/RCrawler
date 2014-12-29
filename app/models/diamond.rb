@@ -44,6 +44,10 @@ class Diamond < ActiveRecord::Base
     end
   end
 
+  def price_offset
+    0
+  end
+
   def valid_to_show?
     (self.number_of_results || 0) >= min_number_of_results_to_display
   end
