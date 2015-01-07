@@ -45,7 +45,7 @@ class Diamond < ActiveRecord::Base
   end
 
   def price_offset
-    0
+    nil
   end
 
   def valid_to_show?
@@ -65,8 +65,8 @@ class Diamond < ActiveRecord::Base
   end
 
   def self.ordered_by_last_update
-    max_update_days_time = 7
-    unscoped.where(Setting.crawling_ranges).where('updated_at < ?', 0.days.ago).where('update_at > ', max_update_days_time.days.ago).order(:updated_at)
+    max_update_days_time = 90
+    unscoped.where(Setting.crawling_ranges).where('updated_at < ?', 0.days.ago).where('updated_at > ?', max_update_days_time.days.ago).order(:updated_at)
   end
 
   private

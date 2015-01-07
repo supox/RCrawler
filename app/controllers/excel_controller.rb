@@ -24,16 +24,22 @@ class ExcelController < ApplicationController
   end
 
   def ajdustment_sheet
-    ranges = Diamond.price_list_ranges
-    keys = ranges.keys + [:price_offset]
-    headers = keys.collect{ |k| k.to_s.titleize}
-    rows = [headers] + Diamond.search(ranges).select{|d| !(d.cut=="Excellent" && d.polish=="Excellent" && d.sym=="Excellent" && d.flour=="None")}.collect{|d| keys.collect{|key| d.send key }}
+    ranges = Diamond.ranges
+    values = product_hash(ranges)
+    headers = ranges.keys.collect{ |k| k.to_s.titleize} + ["Offset"]
+    rows = values.select{|d| !(d[:cut]=="Excellent" && d[:polish]=="Excellent" && d[:sym]=="Excellent" && d[:flour]=="None")}.collect{|d| d.values()}
 
     filename = "offsets_#{Time.now.strftime("%d_%m_%Y")}.xlsx"
-    send_excel filename, rows
+    send_excel filename, [headers]+rows
   end
 
   private
+  def product_hash(hsh)
+    attrs   = hsh.values
+    keys    = hsh.keys
+    product = attrs[0].product(*attrs[1..-1])
+    product.map{ |p| Hash[keys.zip p] }
+  end
 
   def load_price_list
     ranges = Diamond.price_list_ranges
