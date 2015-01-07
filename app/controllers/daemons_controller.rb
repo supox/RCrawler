@@ -22,12 +22,12 @@ class DaemonsController < ApplicationController
 
   def logs
     lines = params[:lines] || 1000
-    @logs = `tail -n #{lines} log/crawler_daemon.rb.output`
+    @logs = `tail -n #{lines} log/crawler_daemon.rb`
   end
 
   private
 
   def assign_daemon
-    @daemon =Daemons::Rails::Monitoring.controllers.first
+    @daemon = Daemons::Rails::Monitoring.controllers.first
   end
 end
