@@ -2,7 +2,15 @@ class DaemonsController < ApplicationController
   before_action :assign_daemon
 
   def index
-    @status = dd('status')
+    status = dd('status')
+    case status
+    when /no instances running/
+      @status = "Not running"
+    when /running \[pid \d+\]/
+      @status = "Running"
+    else
+      @status = status
+    end
   end 
 
   def start
