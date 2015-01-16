@@ -28,7 +28,7 @@
       = semantic_form_for adjustment, remote: true, html:{onsubmit:"$('##{button_id}').attr('value','Updating...');"} do |f|
         - columns = %w{cut_vg cut_g sym_vg sym_g pol_vg pol_g flor_faint flor_medium flor_strong}
         - columns.each do |col|
-          %td= f.input col.to_sym, label: false 
+          %td= f.input col.to_sym, label: false, input_html:{onchange:"$('#update_btn_#{adjustment.id}').click();"}  
         %td= f.action :submit, label: "Update", button_html: { :class => "btn btn-primary", id: button_id}
 
 %br
