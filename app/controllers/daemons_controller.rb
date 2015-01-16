@@ -32,8 +32,6 @@ class DaemonsController < ApplicationController
   def logs
     lines = params[:lines] || 1000
     @logs = `tail -n #{lines} log/crawler_daemon.rb.log`
-
-    @logs = dd 'status'
   end 
 
   private

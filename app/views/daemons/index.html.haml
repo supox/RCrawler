@@ -1,11 +1,8 @@
 %h1 Daemons
 %dl
-  -[:path, :app_name].each do |prop|
-    %dt= prop.to_s.titleize
-    %dd= @daemon.send prop
-  %dt Status
-  %dd
-    %b= @status
+  %dt
+    Status: 
+    = @status
   %dt Actions
   %dd
     -[:start, :stop, :restart].each do |action|
