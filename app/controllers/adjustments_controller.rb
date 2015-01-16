@@ -2,7 +2,7 @@ class AdjustmentsController < ApplicationController
   before_action :set_adjustment, only: [:show, :edit, :update, :destroy]
 
   def index
-    @adjustments = Adjustment.paginate(:per_page => (params[:per_page] || 25), :page => params[:page])
+    @adjustments = Adjustment.groups.paginate(:per_page => (params[:per_page] || Adjustment.per_page), :page => params[:page])
   end
 
   def show

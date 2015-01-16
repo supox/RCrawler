@@ -21,8 +21,8 @@
   - @adjustments.each do |adjustment|
     %tr
       %td= adjustment.size
-      %td= adjustment.color
-      %td= adjustment.clarity
+      %td= adjustment.color_group_name
+      %td= adjustment.clarity_group_name
 
       - button_id = "update_btn_#{adjustment.id}"
       = semantic_form_for adjustment, remote: true, html:{onsubmit:"$('##{button_id}').attr('value','Updating...');"} do |f|
