@@ -1,5 +1,5 @@
 class DaemonsController < ApplicationController
-  before_filter :assign_daemon
+  before_action :assign_daemon
 
   def index
   end
@@ -22,7 +22,7 @@ class DaemonsController < ApplicationController
 
   def logs
     lines = params[:lines] || 1000
-    @logs = `tail -n #{lines} log/crawler_daemon.rb`
+    @logs = `tail -n #{lines} log/crawler_daemon.rb.log`
   end
 
   private
