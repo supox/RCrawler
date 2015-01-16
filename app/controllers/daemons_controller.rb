@@ -2,32 +2,41 @@ class DaemonsController < ApplicationController
   before_action :assign_daemon
 
   def index
-  end
+    @status = dd('status')
+  end 
 
   def start
-    r = @daemon.start
+    r = dd 'start'
     redirect_to daemons_path, :flash => {:info => "Daemon started. #{r}"}
-  end
+  end 
 
   def stop
-    r = @daemon.stop
+    r = dd 'stop'
     redirect_to daemons_path, :flash => {:info => "Daemon stopped. #{r}"}
-  end
+  end 
 
   def restart
-    r = @daemon.stop
-    r = @daemon.start
+    dd 'stop'
+    r = dd 'start'
     redirect_to daemons_path, :flash => {:info => "Daemon restarted. #{r}"}
-  end
+  end 
 
   def logs
     lines = params[:lines] || 1000
     @logs = `tail -n #{lines} log/crawler_daemon.rb.log`
-  end
+
+    @logs = dd 'status'
+  end 
 
   private
 
+  def dd cmd 
+    Bundler.with_clean_env do
+      return `#{@daemon.path} #{cmd}`
+    end 
+  end 
+
   def assign_daemon
     @daemon = Daemons::Rails::Monitoring.controllers.first
-  end
+  end 
 end
