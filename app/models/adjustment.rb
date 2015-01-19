@@ -3,38 +3,26 @@ class Adjustment < ActiveRecord::Base
   default_scope { order('created_at ASC') }
   after_save :update_group, if: :in_groups?
 
-  scope :groups, -> {where(:color => ["D", "G", "K"], clarity: ["IF", "VVS1", "VS1", "SI1", "I1"])}
+  scope :groups, -> {where(:color => ["D", "G", "I", "K", "L"], clarity: ["IF", "VVS1", "VS1", "SI1", "I1"])}
   def self.groups_hash
     {
-      color:{"D-F" => ("D".."F").to_a, "G-J" => ("G".."J").to_a, "K-M" => ("K".."M").to_a},
+      color:{"D-F" => ("D".."F").to_a, "G-H" => ("G".."H").to_a, "I-J" => ["I", "J"], K: ["K"], "L-M" => ("L".."M").to_a},
       clarity:{"IF" => ["IF"], "VVS" => ["VVS1", "VVS2"], "VS" => ["VS1", "VS2"], "SI" => ["SI1", "SI2"], "I1" => ["I1"]}
     }
   end
 
   def color_group_name
-    case self.color
-    when "D".."F"
-      "D-F" 
-    when "G".."J"
-      "G-J"
-    when "K".."M"
-      "K-M"
-    else
-      self.color
+    Adjustment.groups_hash[:color].each do |name,v|
+      return name if v.include?(self.color)
     end
+    return self.color
   end
 
   def clarity_group_name
-    case self.clarity
-    when "VVS1", "VVS2"
-      "VVS" 
-    when "VS1", "VS2"
-      "VS"
-    when "SI1", "SI2"
-      "SI"
-    else
-      self.clarity
+    Adjustment.groups_hash[:clarity].each do |name,v|
+      return name if v.include?(self.clarity)
     end
+    return self.clarity
   end
 
 
@@ -66,5 +54,5 @@ class Adjustment < ActiveRecord::Base
       end
     end
   end
-
 end
+
